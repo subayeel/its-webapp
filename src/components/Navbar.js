@@ -35,17 +35,7 @@ import { Close } from "@mui/icons-material";
 import { useAddTicketMutation } from "../api/endpoints/ticketsEndpoint";
 import { useLogoutQuery } from "../api/auth/authApiSlice";
 import axios from "axios";
-const customStyle = {
-  content: {
-    padding: "0 0 80px 0",
-    width: "500px",
-    margin: "auto",
-    position: "relative",
-  },
-  overlay: {
-    zIndex: 99,
-  },
-};
+import { customStyle } from "../utils/modalStyles";
 
 const ACTION = {
   projectType: "handleProject",

@@ -55,11 +55,8 @@ export const JobTitleText = styled.p`
   font-size: 18px;
   letter-spacing: 1px;
   width: 100%;
-  color: ${(props) => props.theme.colors.atsBlue};
-  &:hover {
-    cursor: pointer;
-    color: ${(props) => props.theme.colors.atsGreen};
-  }
+  color: #000;
+  
 `;
 export const JobSubTitle = styled.p`
   margin: 0;

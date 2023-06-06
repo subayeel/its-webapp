@@ -67,6 +67,7 @@ function Register() {
         ></TextField>
         <TextField
           label="Password"
+          type="password"
           value={pwd}
           onChange={(e) => setPwd(e.target.value)}
         ></TextField>

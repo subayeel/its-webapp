@@ -4,6 +4,7 @@ import Login from "./pages/Auth/Login";
 import Dashboard from "./pages/Main/Dashboard";
 import PersistLogin from "./pages/Auth/PersistLogin";
 import Register from "./pages/Auth/Register";
+import Home from "./pages/Main/Home";
 
 function App() {
   return (
@@ -15,7 +16,8 @@ function App() {
             <Route element={<Register />} path="/register"></Route>
 
             <Route element={<Navbar></Navbar>}>
-              <Route element={<Dashboard />} path="/dashboard"></Route>
+              <Route element={<Dashboard />} path="/project/:id"></Route>
+              <Route element={<Home />} path="/"></Route>
             </Route>
           </Route>
         </Routes>

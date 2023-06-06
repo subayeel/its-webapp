@@ -1,3 +1,4 @@
+import { AddCircleOutlineOutlined } from "@mui/icons-material";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 
@@ -11,8 +12,14 @@ export const Container = styled(CenterFlexContainer)`
   flex-direction: column;
 `;
 
+export const MainContainer = styled.div`
+  margin: auto;
+  max-width: 1140px;
+`;
+
 export const GridContainer = styled.div`
   display: grid;
+  box-sizing: "border-box";
   gap: ${(props) => (props.gap ? props.gap : "1rem")};
   grid-template-columns: ${(props) => props.columns};
   place-content: ${(props) => (props.place ? props.place : "center")};
@@ -93,11 +100,21 @@ export const TextField = styled.input`
   outline: none;
 `;
 
+export const HeroText = styled.h1`
+  text-align: center;
+  color: #6c6c6c;
+  font-size: 32px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  width: 100%;
+  margin: 0 0 1rem 0;
+`;
 export const Heading = styled.h1`
   font-size: 22px;
   font-weight: 400;
   letter-spacing: 0.5px;
   width: 100%;
+  margin: 0 0 1rem 0;
 `;
 export const Heading2 = styled.h2`
   font-size: 18px;
@@ -112,6 +129,16 @@ export const LightText = styled.p`
   margin: 0;
 `;
 export const LinkText = styled(Link)`
+  font-size: 14px;
+  color: #6095f0;
+  margin: 0;
+  text-decoration: none;
+  &:hover {
+    color: #2024ea;
+    cursor: pointer;
+  }
+`;
+export const AddIcon = styled(AddCircleOutlineOutlined)`
   font-size: 14px;
   color: #6095f0;
   margin: 0;
