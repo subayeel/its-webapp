@@ -1,5 +1,6 @@
 {
   "name": "its-webapp",
+  "homepage": "http://subayeel.github.io/its-webapp",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
