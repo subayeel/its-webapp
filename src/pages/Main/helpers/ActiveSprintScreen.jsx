@@ -17,22 +17,18 @@ import {
   TileHeading,
   SkillTile,
 } from "../Main.elements";
-
+import { useSelector } from "react-redux";
 import { Button } from "@mui/material";
-import {
-  useGetTicketsQuery,
-  useUpdateTicketStatusMutation,
-} from "../../../api/endpoints/ticketsEndpoint";
+import { useGetTicketsQuery } from "../../../api/endpoints/ticketsEndpoint";
 import { useNavigate, useParams } from "react-router-dom";
 import CustomKanbanBoard from "./CustomKanbanBoard";
+import { useUpdateProjectTicketStatusMutation } from "../../../api/endpoints/projectEndpoint";
 function ActiveSprintScreen() {
   const { projectId } = useParams();
   const navigate = useNavigate();
-  const {
-    data: tickets,
-    isLoading: isTicketLoading,
-    isSuccess: isTicketSuccess,
-  } = useGetTicketsQuery();
+  const data = useSelector((state) => state.project);
+  console.log(data);
+  
 
   const [
     changeTicketStatus,
@@ -42,28 +38,30 @@ function ActiveSprintScreen() {
       isError: isChangeStatusError,
       error: changeStatusError,
     },
-  ] = useUpdateTicketStatusMutation();
+  ] = useUpdateProjectTicketStatusMutation();
+
+  
 
   const columnsFromBackend = {
     TODO: {
       name: "TO DO",
-      items: tickets?.filter((c) => c.status === "TODO"),
+      items: data.tickets?.filter((c) => c.status === "TODO"),
     },
     InProgress: {
       name: "In Progress",
-      items: tickets?.filter((c) => c.status === "InProgress"),
+      items: data.tickets?.filter((c) => c.status === "InProgress"),
     },
     DevelopmentCompleted: {
       name: "Development Completed",
-      items: tickets?.filter((c) => c.status === "DevelopmentCompleted"),
+      items: data.tickets?.filter((c) => c.status === "DevelopmentCompleted"),
     },
     InQA: {
       name: "In QA",
-      items: tickets?.filter((c) => c.status === "InQA"),
+      items: data.tickets?.filter((c) => c.status === "InQA"),
     },
     Done: {
       name: "Done",
-      items: tickets?.filter((c) => c.status === "Done"),
+      items: data.tickets?.filter((c) => c.status === "Done"),
     },
   };
 
@@ -71,7 +69,7 @@ function ActiveSprintScreen() {
 
   useEffect(() => {
     setColumns(columnsFromBackend);
-  }, [isTicketSuccess]);
+  }, [data]);
 
   const handleOnDragEnd = async (result, columns, setColumns) => {
     if (!result.destination) return;
@@ -95,7 +93,7 @@ function ActiveSprintScreen() {
           items: destItems,
         },
       });
-
+      
       await changeTicketStatus({
         status: destination.droppableId,
         id: result.draggableId,
@@ -154,9 +152,7 @@ function ActiveSprintScreen() {
                                   ...provided.draggableProps.style,
                                 }}
                               >
-                              
                                 <Container width="100%" align="flex-start">
-                                
                                   <JobSubTitle>{item.title}</JobSubTitle>
                                   <TileHeading>{item.description}</TileHeading>
                                   <JobSmallText>

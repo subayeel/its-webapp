@@ -37,9 +37,10 @@ import { useLogoutQuery } from "../api/auth/authApiSlice";
 import axios from "axios";
 import { customStyle } from "../utils/modalStyles";
 import { useSelector } from "react-redux";
+import { useAddProjectTicketMutation } from "../api/endpoints/projectEndpoint";
 
 const ACTION = {
-  projectType: "handleProject",
+  projectId: "handleProjectId",
   issueType: "handleIssue",
   status: "handleStatus",
   description: "handleDesc",
@@ -50,7 +51,8 @@ const ACTION = {
   title: "handleTitle",
 };
 function Navbar() {
-  const [addTicket, { isLoading: isAddTicketLoading }] = useAddTicketMutation();
+  const [addTicket, { isLoading: isAddTicketLoading }] =
+    useAddProjectTicketMutation();
 
   const navigate = useNavigate();
   const data = useSelector((state) => state.project);
@@ -85,8 +87,8 @@ function Navbar() {
 
   function reducer(state, action) {
     switch (action.type) {
-      case ACTION.projectType:
-        return { ...state, projectType: action.payload };
+      case ACTION.projectId:
+        return { ...state, projectId: action.payload };
       case ACTION.issueType:
         return { ...state, issueType: action.payload };
       case ACTION.status:
@@ -105,7 +107,7 @@ function Navbar() {
         return { ...state, sprint: action.payload };
       case ACTION.reset:
         return {
-          projectType: "",
+          projectId: "",
           issueType: "",
           status: "",
           description: "",
@@ -117,7 +119,6 @@ function Navbar() {
     }
   }
   const [issueData, dispatch] = useReducer(reducer, {
-    projectType: "",
     issueType: "",
     status: "",
     description: "",
@@ -174,15 +175,17 @@ function Navbar() {
   };
 
   async function handleSubmit() {
-    await addTicket(issueData);
+    await addTicket({ ...issueData, projectId: data.projectId });
 
     dispatch({ type: ACTION.reset });
     setAddingModal(false);
   }
 
+  const localApi = "http://localhost:5000";
+  const production = "https://its-backend.onrender.com";
   async function handleLogout() {
     axios
-      .get("https://its-backend.onrender.com/logout")
+      .get(production + "/logout")
       .then((res) => {
         console.log(res.data);
       })
