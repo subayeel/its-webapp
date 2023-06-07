@@ -50,8 +50,12 @@ import {
   useGetSingleProjectQuery,
 } from "../../api/endpoints/projectEndpoint";
 
+import { useSelector, useDispatch } from "react-redux";
+import { setProjectData } from "../../reduxSlices/projectsSlice";
+
 function Dashboard() {
   const { id } = useParams();
+  const dispatch = useDispatch();
   const [selectedProject, setSelectedProject] = useState("");
 
   //RTK Query
@@ -68,7 +72,7 @@ function Dashboard() {
     isSuccess: isSingleProjectSuccess,
   } = useGetSingleProjectQuery(id);
 
-  console.log(projects);
+  
   const [open, setOpen] = useState(true);
   const [activeTab, setActiveTab] = useState("sprint");
   const [projectId, setProjectId] = useState();
@@ -140,6 +144,20 @@ function Dashboard() {
     }
   }
 
+  //store selected project in redux store
+  useEffect(() => {
+    dispatch(
+      setProjectData({
+        projectId: singleProject?._id,
+        description: singleProject?.description,
+        tickets: singleProject?.tickets,
+        employees: singleProject?.employees,
+        title: singleProject?.title,
+      })
+    );
+  }, [singleProject]);
+  const data = useSelector((state)=>state.project);
+  console.log(data);
   return (
     <GridContainer style={{ height: "calc(100vh - 65px)" }} columns="250px 1fr">
       <ReactModal

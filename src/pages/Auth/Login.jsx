@@ -14,7 +14,8 @@ import { useNavigate, useLocation, Link } from "react-router-dom";
 
 import axios from "axios";
 import { LoginContainer } from "./Auth.elements";
-const LOGIN_URL = "http://localhost:5000/auth";
+// const LOGIN_URL = "http://localhost:5000/auth";
+const LOGIN_URL = "https://its-backend.onrender.com";
 function Login() {
   const navigate = useNavigate();
   const location = useLocation();
@@ -41,7 +42,7 @@ function Login() {
       const roles = response?.data?.roles;
 
       if (response.status === 200) {
-        navigate("/dashboard");
+        navigate("/home");
       }
       setAuth({ user, pwd, roles, accessToken });
       dispatch(setCredentials({ ...response.data }));

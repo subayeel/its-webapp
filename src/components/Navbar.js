@@ -31,11 +31,12 @@ import {
   ListItemText,
   Checkbox,
 } from "@mui/material";
-import { Close } from "@mui/icons-material";
+import { Close, Light } from "@mui/icons-material";
 import { useAddTicketMutation } from "../api/endpoints/ticketsEndpoint";
 import { useLogoutQuery } from "../api/auth/authApiSlice";
 import axios from "axios";
 import { customStyle } from "../utils/modalStyles";
+import { useSelector } from "react-redux";
 
 const ACTION = {
   projectType: "handleProject",
@@ -52,6 +53,8 @@ function Navbar() {
   const [addTicket, { isLoading: isAddTicketLoading }] = useAddTicketMutation();
 
   const navigate = useNavigate();
+  const data = useSelector((state) => state.project);
+  console.log(data);
 
   const [isAddingModal, setAddingModal] = useState(false);
   const [personName, setPersonName] = useState([]);
@@ -76,7 +79,7 @@ function Navbar() {
       // On autofill we get a stringified value.
       typeof value === "string" ? value.split(",") : value
     );
-    
+
     dispatch({ type: ACTION.assignee, payload: value });
   };
 
@@ -179,7 +182,7 @@ function Navbar() {
 
   async function handleLogout() {
     axios
-      .get("http://localhost:5000/logout")
+      .get("https://its-backend.onrender.com/logout")
       .then((res) => {
         console.log(res.data);
       })
@@ -204,6 +207,7 @@ function Navbar() {
           <Heading2>Create Issue</Heading2>
           <Close onClick={() => setAddingModal(false)} />
         </GridContainer>
+
         <GridContainer
           style={{ overflowY: "scroll", height: "300px" }}
           justify="flex-start"
@@ -211,6 +215,10 @@ function Navbar() {
           columns="1fr"
           padding="1rem"
         >
+          <LightText>
+            Project Name: <Heading2>{data.title}</Heading2>
+          </LightText>
+
           <TextField
             label="Issue Title"
             value={issueData.title}
@@ -218,26 +226,6 @@ function Navbar() {
               dispatch({ type: ACTION.title, payload: e.target.value });
             }}
           ></TextField>
-          <FormControl fullWidth>
-            <InputLabel id="select-project">Project *</InputLabel>
-            <Select
-              fullWidth
-              sx={{ width: "280px" }}
-              labelId="select-project"
-              value={issueData.projectType}
-              label="Project *"
-              onChange={(e) => {
-                dispatch({ type: ACTION.projectType, payload: e.target.value });
-              }}
-            >
-              {dummyProject.map((dp) => {
-                return (
-                  <MenuItem value={dp.projectTitle}>{dp.projectTitle}</MenuItem>
-                );
-              })}
-            </Select>
-          </FormControl>
-
           <FormControl fullWidth>
             <InputLabel id="issue-label">Issue Type *</InputLabel>
             <Select
