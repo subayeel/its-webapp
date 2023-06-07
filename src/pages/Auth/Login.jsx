@@ -1,5 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { CardContainer, ErrorContainer, GridContainer, Heading, LinkText } from "../../Global";
+import {
+  CardContainer,
+  ErrorContainer,
+  GridContainer,
+  Heading,
+  LinkText,
+} from "../../Global";
 import {
   Button,
   Checkbox,
@@ -68,6 +74,13 @@ function Login() {
     localStorage.setItem("persist", persist);
   }, [persist]);
 
+  const handleKeypress = (e) => {
+    //it triggers by pressing the enter key
+    if (e.keyCode === 13) {
+      handleSubmit();
+    }
+  };
+
   return (
     <LoginContainer>
       <Heading>Login</Heading>
@@ -76,12 +89,14 @@ function Login() {
           label="UserName"
           value={user}
           onChange={(e) => setUser(e.target.value)}
+          onKeyDown={handleKeypress}
         />
         <TextField
           label="Password"
           type="password"
           value={pwd}
           onChange={(e) => setPwd(e.target.value)}
+          onKeyDown={handleKeypress}
         />
         {error && <ErrorContainer>{error}</ErrorContainer>}
         <LinkText to="/register">Not Registered?</LinkText>
@@ -90,8 +105,8 @@ function Login() {
           control={<Checkbox value={persist} onChange={togglePersist} />}
           label="Remember Me"
         />
-        
-        <Button onClick={handleSubmit} variant="contained">
+
+        <Button type="submit" onClick={handleSubmit} variant="contained">
           Login
         </Button>
       </GridContainer>

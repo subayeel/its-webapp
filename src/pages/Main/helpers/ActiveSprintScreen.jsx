@@ -27,8 +27,8 @@ function ActiveSprintScreen() {
   const { projectId } = useParams();
   const navigate = useNavigate();
   const data = useSelector((state) => state.project);
+  // const [newData, setNewData] = useState(data);
   console.log(data);
-  
 
   const [
     changeTicketStatus,
@@ -39,8 +39,6 @@ function ActiveSprintScreen() {
       error: changeStatusError,
     },
   ] = useUpdateProjectTicketStatusMutation();
-
-  
 
   const columnsFromBackend = {
     TODO: {
@@ -93,7 +91,7 @@ function ActiveSprintScreen() {
           items: destItems,
         },
       });
-      
+
       await changeTicketStatus({
         status: destination.droppableId,
         id: result.draggableId,

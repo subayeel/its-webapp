@@ -38,6 +38,8 @@ import axios from "axios";
 import { customStyle } from "../utils/modalStyles";
 import { useSelector } from "react-redux";
 import { useAddProjectTicketMutation } from "../api/endpoints/projectEndpoint";
+import { useDispatch } from "react-redux";
+import { setProjectData } from "../reduxSlices/projectsSlice";
 
 const ACTION = {
   projectId: "handleProjectId",
@@ -57,6 +59,7 @@ function Navbar() {
   const navigate = useNavigate();
   const data = useSelector((state) => state.project);
   console.log(data);
+  const dispatchRedux = useDispatch();
 
   const [isAddingModal, setAddingModal] = useState(false);
   const [personName, setPersonName] = useState([]);
@@ -175,8 +178,19 @@ function Navbar() {
   };
 
   async function handleSubmit() {
-    await addTicket({ ...issueData, projectId: data.projectId });
-
+    const response = await addTicket({
+      ...issueData,
+      projectId: data.projectId,
+    });
+    dispatchRedux(
+      setProjectData({
+        title: response?.data.title,
+        description: response?.data.description,
+        projectId: response?.data.projectId,
+        tickets: response?.data.tickets,
+        employees: response?.data.employees,
+      })
+    );
     dispatch({ type: ACTION.reset });
     setAddingModal(false);
   }
