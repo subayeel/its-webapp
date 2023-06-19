@@ -1,14 +1,14 @@
 {
   "files": {
     "main.css": "/its-webapp/static/css/main.d76925f2.css",
-    "main.js": "/its-webapp/static/js/main.9fb7400e.js",
+    "main.js": "/its-webapp/static/js/main.12252b2b.js",
     "static/media/logo2.png": "/its-webapp/static/media/logo2.64135fe8e7edda4be4ce.png",
     "index.html": "/its-webapp/index.html",
     "main.d76925f2.css.map": "/its-webapp/static/css/main.d76925f2.css.map",
-    "main.9fb7400e.js.map": "/its-webapp/static/js/main.9fb7400e.js.map"
+    "main.12252b2b.js.map": "/its-webapp/static/js/main.12252b2b.js.map"
   },
   "entrypoints": [
     "static/css/main.d76925f2.css",
-    "static/js/main.9fb7400e.js"
+    "static/js/main.12252b2b.js"
   ]
 }
