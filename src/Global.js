@@ -96,7 +96,8 @@ export const TextButton = styled.p`
 
 export const TextField = styled.input`
   padding: 0.7rem 1rem 0.7rem 2rem;
-
+  border: 1px solid #ccc;
+  border-radius: 4px;
   outline: none;
 `;
 

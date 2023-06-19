@@ -151,6 +151,10 @@ function ActiveSprintScreen() {
       name: "Done",
       items: data.tickets?.filter((c) => c.status === "Done"),
     },
+    Apple: {
+      name: "Done",
+      items: data.tickets?.filter((c) => c.status === "Done"),
+    },
   };
 
   const [columns, setColumns] = useState(columnsFromBackend);

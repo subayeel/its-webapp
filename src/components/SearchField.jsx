@@ -5,7 +5,7 @@ function SearchField() {
   return (
     <RelativeContainer>
       <Absolute left="0.5rem" top="0.7rem">
-        <FaSearch />
+        <FaSearch style={{color:"#ccc"}} />
       </Absolute>
       <TextField placeholder="Search Tickets" />
     </RelativeContainer>

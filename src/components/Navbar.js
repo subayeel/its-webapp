@@ -402,12 +402,13 @@ function Navbar() {
             Create
           </Button>
         </NavLinks>
+        {/* <TextField label="Search" margin="dense"></TextField> */}
         <CenterFlexContainer>
           <SearchField />
-          <SearchBtn>
+          {/* <SearchBtn>
             Search &nbsp;
             <FaSearch />
-          </SearchBtn>
+          </SearchBtn> */}
         </CenterFlexContainer>
 
         <Button variant="outlined" onClick={handleLogout}>
