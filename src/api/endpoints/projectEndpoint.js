@@ -8,6 +8,7 @@ const projectEndPoints = apiSlice.injectEndpoints({
     }),
     getSingleProject: builder.query({
       query: (id) => `/project/singleproject?id=${id}`,
+      providesTags: ["Project"],
     }),
     addProject: builder.mutation({
       query: (data) => ({
@@ -23,7 +24,7 @@ const projectEndPoints = apiSlice.injectEndpoints({
         method: "PUT",
         body: data,
       }),
-      invalidatesTags: ["Projects"],
+      invalidatesTags: ["Project"],
     }),
     updateProjectTicketStatus: builder.mutation({
       query: (data) => ({
@@ -33,7 +34,23 @@ const projectEndPoints = apiSlice.injectEndpoints({
           status: data.status,
         },
       }),
-      invalidatesTags: ["Projects"],
+      invalidatesTags: ["Project"],
+    }),
+    updateProjectTicketDetails: builder.mutation({
+      query: (data) => ({
+        url: `/project/ticket/update?id=${data.id}`,
+        method: "PUT",
+        body: data,
+      }),
+      invalidatesTags: ["Project"],
+    }),
+    removeProjectTicket: builder.mutation({
+      query: (data) => ({
+        url: `/project/ticket/delete?id=${data.id}`,
+        method: "PUT",
+        body: { projectId: data.projectId },
+      }),
+      invalidatesTags: ["Project"],
     }),
   }),
 });
@@ -43,3 +60,5 @@ export const { useUpdateProjectTicketStatusMutation } = projectEndPoints;
 export const { useGetProjectsQuery } = projectEndPoints;
 export const { useGetSingleProjectQuery } = projectEndPoints;
 export const { useAddProjectTicketMutation } = projectEndPoints;
+export const { useUpdateProjectTicketDetailsMutation } = projectEndPoints;
+export const { useRemoveProjectTicketMutation } = projectEndPoints;

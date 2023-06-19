@@ -140,7 +140,7 @@ function Dashboard() {
 
   function renderBody() {
     if (activeTab === "sprint") {
-      return <ActiveSprintScreen></ActiveSprintScreen>;
+      return <ActiveSprintScreen ></ActiveSprintScreen>;
     }
   }
 

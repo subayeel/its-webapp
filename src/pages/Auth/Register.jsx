@@ -16,9 +16,15 @@ function Register() {
   const [error, setError] = useState();
   const [userName, setUserName] = useState();
   const [pwd, setPwd] = useState();
+  const [cpwd, setCPwd] = useState("");
+
   const navigate = useNavigate();
 
   const handleSubmit = async () => {
+    if (pwd !== cpwd) {
+      setError("Paswords do not match. ");
+      return;
+    }
     try {
       const registerUser = await axios.post("/register", {
         user: userName,
@@ -48,6 +54,13 @@ function Register() {
       console.log(err.response);
     }
   };
+
+  const handleKeypress = (e) => {
+    //it triggers by pressing the enter key
+    if (e.keyCode === 13) {
+      handleSubmit();
+    }
+  };
   useEffect(() => {
     setError("");
   }, [userName, fullName, pwd]);
@@ -71,6 +84,13 @@ function Register() {
           value={pwd}
           onChange={(e) => setPwd(e.target.value)}
         ></TextField>
+        <TextField
+          label="Confirm Password"
+          type="password"
+          value={cpwd}
+          onChange={(e) => setCPwd(e.target.value)}
+          onKeyDown={handleKeypress}
+        />
         <LinkText to="/login">Already Member?</LinkText>
 
         {error && <ErrorContainer>{error}</ErrorContainer>}

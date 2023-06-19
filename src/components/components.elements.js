@@ -6,6 +6,7 @@ export const NavContainer = styled(GridContainer)`
   padding: 0 2rem;
   height: 60px;
 border-bottom: 2px solid #ddd;
+background-color: #fff;
   /* box-shadow: 1px 2px 8px rgba(0, 0, 0, 0.4); */
 `;
 

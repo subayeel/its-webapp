@@ -20,8 +20,8 @@ import { useNavigate, useLocation, Link } from "react-router-dom";
 
 import axios from "axios";
 import { LoginContainer } from "./Auth.elements";
-// const LOGIN_URL = "http://localhost:5000/auth";
-const LOGIN_URL = "https://its-backend.onrender.com/auth";
+const LOGIN_URL = "http://localhost:5000/auth";
+// const LOGIN_URL = "https://its-backend.onrender.com/auth";
 function Login() {
   const navigate = useNavigate();
   const location = useLocation();
@@ -34,6 +34,7 @@ function Login() {
   const { setAuth, persist, setPersist, auth } = useAuth();
 
   const handleSubmit = async () => {
+    
     try {
       const response = await axios.post(
         LOGIN_URL,
@@ -98,13 +99,14 @@ function Login() {
           onChange={(e) => setPwd(e.target.value)}
           onKeyDown={handleKeypress}
         />
+        
         {error && <ErrorContainer>{error}</ErrorContainer>}
         <LinkText to="/register">Not Registered?</LinkText>
 
-        <FormControlLabel
+        {/* <FormControlLabel
           control={<Checkbox value={persist} onChange={togglePersist} />}
           label="Remember Me"
-        />
+        /> */}
 
         <Button type="submit" onClick={handleSubmit} variant="contained">
           Login

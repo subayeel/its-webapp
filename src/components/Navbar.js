@@ -31,9 +31,8 @@ import {
   ListItemText,
   Checkbox,
 } from "@mui/material";
-import { Close, Light } from "@mui/icons-material";
-import { useAddTicketMutation } from "../api/endpoints/ticketsEndpoint";
-import { useLogoutQuery } from "../api/auth/authApiSlice";
+import { Close } from "@mui/icons-material";
+
 import axios from "axios";
 import { customStyle } from "../utils/modalStyles";
 import { useSelector } from "react-redux";
@@ -199,7 +198,7 @@ function Navbar() {
   const production = "https://its-backend.onrender.com";
   async function handleLogout() {
     axios
-      .get(production + "/logout")
+      .get(localApi + "/logout")
       .then((res) => {
         console.log(res.data);
       })

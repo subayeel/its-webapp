@@ -25,9 +25,11 @@ const ticketsEnpoint = apiSlice.injectEndpoints({
       }),
       invalidatesTags: ["Tickets"],
     }),
+    
   }),
 });
 
 export const { useGetTicketsQuery } = ticketsEnpoint;
 export const { useAddTicketMutation } = ticketsEnpoint;
 export const { useUpdateTicketStatusMutation } = ticketsEnpoint;
+
