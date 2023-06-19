@@ -495,7 +495,7 @@ function ActiveSprintScreen() {
                                 }}
                               >
                                 <Container width="100%" align="flex-start">
-                                  <GridContainer columns="1fr auto">
+                                  <GridContainer columns="1fr auto" width="100%">
                                     <JobSubTitle>{item.title}</JobSubTitle>
                                     <Delete onClick={()=>handleDeleteTicket(item._id)} />
                                   </GridContainer>
