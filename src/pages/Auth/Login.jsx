@@ -20,8 +20,8 @@ import { useNavigate, useLocation, Link } from "react-router-dom";
 
 import axios from "axios";
 import { LoginContainer } from "./Auth.elements";
-const LOGIN_URL = "http://localhost:5000/auth";
-// const LOGIN_URL = "https://its-backend.onrender.com/auth";
+// const LOGIN_URL = "http://localhost:5000/auth";
+const LOGIN_URL = "https://its-backend.onrender.com/auth";
 function Login() {
   const navigate = useNavigate();
   const location = useLocation();
