@@ -17,11 +17,9 @@ import {
   TileHeading,
   SkillTile,
 } from "../Main.elements";
-import { setProjectData } from "../../../reduxSlices/projectsSlice";
 
 import { HLine } from "../../../Global";
 
-import ListItemText from "@mui/material/ListItemText";
 
 import { Heading2 } from "../../../Global";
 import { Close, Delete } from "@mui/icons-material";
@@ -29,7 +27,6 @@ import {
   FormControl,
   InputLabel,
   Select,
-  OutlinedInput,
   Checkbox,
   MenuItem,
   Button,

@@ -1,12 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, memo } from "react";
 import ReactModal from "react-modal";
 import {
   AddIcon,
   CardContainer,
+  CenterFlexContainer,
   ErrorContainer,
   GridContainer,
   Heading,
   HeroText,
+  LightText,
+  LinkText,
   MainContainer,
 } from "../../Global";
 import { TableContainer } from "./Main.elements";
@@ -28,11 +31,15 @@ import {
   ListItemText,
 } from "@mui/material";
 import { projectModalStyle } from "../../utils/modalStyles";
-import { useAddDeveloperMutation } from "../../api/endpoints/developerEndpoint";
+import {
+  useAddDeveloperMutation,
+  useDeleteDeveloperMutation,
+} from "../../api/endpoints/developerEndpoint";
 import useAuth from "../../hooks/useAuth";
 import { useGetDeveloperQuery } from "../../api/endpoints/managerEndpoint";
+import NoData from "../../components/NoData";
 
-function Home() {
+const Home = memo(() => {
   const navigate = useNavigate();
   const auth = useAuth();
   //adding project states
@@ -56,6 +63,8 @@ function Home() {
     useAddProjectMutation();
   const [addDeveloper, { isLoading: isAddDeveloperLoading }] =
     useAddDeveloperMutation();
+  const [deleteDeveloper, { isLoading: isDeleteDeveloperLoading }] =
+    useDeleteDeveloperMutation();
 
   const {
     data: projects,
@@ -68,18 +77,6 @@ function Home() {
     isSuccess: isDevelopersSuccess,
   } = useGetDeveloperQuery();
 
-  const employees = [
-    "Oliver Hansen",
-    "Van Henry",
-    "April Tucker",
-    "Ralph Hubbard",
-    "Omar Alexander",
-    "Carlos Abbott",
-    "Miriam Wagner",
-    "Bradley Wilkerson",
-    "Virginia Andrews",
-    "Kelly Snyder",
-  ];
   const ITEM_HEIGHT = 48;
   const ITEM_PADDING_TOP = 8;
   const MenuProps = {
@@ -90,7 +87,7 @@ function Home() {
       },
     },
   };
-  console.log(auth.auth.userId);
+  console.log(auth);
   const handleClick = () => {
     setAddingProject(!isAddingProject);
   };
@@ -142,6 +139,21 @@ function Home() {
     setDevUsername("");
     setAddingDeveloper(false);
   }
+  function handleEmptyDev() {
+    setAddingProject(false);
+    setAddingDeveloper(true);
+  }
+  //TODO :create delete endpoint
+  async function handleDeleteDeveloper(did) {
+    try {
+      const response = await deleteDeveloper({ id: did });
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  //TODO: Update existing employee
+  async function handleUpdateDeveloper() {}
   return (
     <MainContainer>
       {/* Add Developer Name */}
@@ -209,14 +221,23 @@ function Home() {
               input={<OutlinedInput label="Employees" />}
               renderValue={(selected) => selected.join(", ")}
               MenuProps={MenuProps}
+              disabled={myDevelopers?.length === 0}
             >
-              {employees.map((name) => (
-                <MenuItem key={name} value={name}>
-                  <Checkbox checked={personName.indexOf(name) > -1} />
-                  <ListItemText primary={name} />
+              {myDevelopers?.map((obj) => (
+                <MenuItem key={obj.fullName} value={obj.fullName}>
+                  <Checkbox checked={personName.indexOf(obj.fullName) > -1} />
+                  <ListItemText primary={obj.fullName} />
                 </MenuItem>
               ))}
             </Select>
+            {myDevelopers?.length === 0 && (
+              <>
+                <LightText>
+                  Please add employees and assign project to them.&nbsp;
+                  <LinkText onClick={handleEmptyDev}>Add Employees</LinkText>
+                </LightText>
+              </>
+            )}
           </FormControl>
           <Button variant="contained" onClick={handleAddProject}>
             Add Project
@@ -233,32 +254,42 @@ function Home() {
               <HeroText>Your Projects</HeroText>
               <AddIcon onClick={handleClick}></AddIcon>
             </GridContainer>
-            <TableContainer>
-              <table>
-                <tr>
-                  <th>S.No</th>
-                  <th>Title</th>
-                  <th>Ticket Count</th>
-                  <th>Employees Count</th>
-                  <th>Action</th>
-                </tr>
-                {projects?.map((obj, i) => {
-                  return (
-                    <tr>
-                      <td>{i}</td>
-                      <td>{obj.title}</td>
-                      <td>{obj.tickets.length}</td>
-                      <td>{obj.employees.length}</td>
-                      <td>
-                        <Button onClick={() => navigate(`/project/${obj._id}`)}>
-                          View
-                        </Button>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </table>
-            </TableContainer>
+            {projects?.length === 0 ? (
+              <NoData
+                message="No Projects Aavailable"
+                onclick={() => setAddingProject(true)}
+                btnText="Add Project"
+              ></NoData>
+            ) : (
+              <TableContainer>
+                <table>
+                  <tr>
+                    <th>S.No</th>
+                    <th>Title</th>
+                    <th>Ticket Count</th>
+                    <th>Employees Count</th>
+                    <th>Action</th>
+                  </tr>
+                  {projects?.map((obj, i) => {
+                    return (
+                      <tr>
+                        <td>{i}</td>
+                        <td>{obj.title}</td>
+                        <td>{obj.tickets.length}</td>
+                        <td>{obj.employees.length}</td>
+                        <td>
+                          <Button
+                            onClick={() => navigate(`/project/${obj._id}`)}
+                          >
+                            View
+                          </Button>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </table>
+              </TableContainer>
+            )}
           </GridContainer>
         </CardContainer>
         <CardContainer>
@@ -268,34 +299,53 @@ function Home() {
               <AddIcon onClick={openAddDevelopersModal}></AddIcon>
             </GridContainer>
             <GridContainer>
-              <GridContainer columns="1fr">
-                <TableContainer>
-                  <table>
-                    <tr>
-                      <th>S.No</th>
-                      <th>Name</th>
-                      <th>Projects Undertaken</th>
-                      <th>Tickets Undertaken</th>
-                      <th>ACTION</th>
-                    </tr>
-                    {myDevelopers?.map((obj, i) => (
+              {myDevelopers?.length === 0 ? (
+                <NoData
+                  message="No Developers assigned to you"
+                  onclick={() => setAddingDeveloper(true)}
+                  btnText="Add Developer"
+                ></NoData>
+              ) : (
+                <GridContainer columns="1fr">
+                  <TableContainer>
+                    <table>
                       <tr>
-                        <td>{i + 1}</td>
-                        <td>{obj.fullName}</td>
-                        <td>{obj.projectsAssigned.length}</td>
-                        <td>{obj.ticketsAssigned.length}</td>
-                        <td>
-                          <Button
-                            onClick={() => navigate(`/developer/${obj._id}`)}
-                          >
-                            View
-                          </Button>
-                        </td>
+                        <th>Name</th>
+                        <th>Projects Undertaken</th>
+                        <th>Tickets Undertaken</th>
+                        <th>ACTION</th>
                       </tr>
-                    ))}
-                  </table>
-                </TableContainer>
-              </GridContainer>
+                      {myDevelopers?.map((obj, i) => (
+                        <tr>
+                          <td>{obj.fullName}</td>
+                          <td>{obj.projectsAssigned.length}</td>
+                          <td>{obj.ticketsAssigned.length}</td>
+                          <td>
+                            <CenterFlexContainer>
+                              <Button
+                                onClick={() =>
+                                  navigate(`/developer/${obj._id}`)
+                                }
+                              >
+                                View
+                              </Button>
+                              <Button
+                                style={{
+                                  background: "#D85959",
+                                  color: "white",
+                                }}
+                                onClick={() => handleDeleteDeveloper(obj._id)}
+                              >
+                                Delete
+                              </Button>
+                            </CenterFlexContainer>
+                          </td>
+                        </tr>
+                      ))}
+                    </table>
+                  </TableContainer>
+                </GridContainer>
+              )}
             </GridContainer>
           </GridContainer>
         </CardContainer>
@@ -329,6 +379,6 @@ function Home() {
       </GridContainer> */}
     </MainContainer>
   );
-}
+});
 
 export default Home;

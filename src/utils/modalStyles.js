@@ -15,7 +15,7 @@ export const projectModalStyle = {
     padding: "0 0 80px 0",
     width: "max-content",
     margin: "auto",
-    padding: "1rem",
+    padding: "1.8rem",
     height: "min-content",
     boxSizing: "border-box",
   },

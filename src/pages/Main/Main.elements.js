@@ -105,7 +105,7 @@ export const SkillTile = styled(CenterFlexContainer)`
 `;
 
 export const TableContainer = styled.div`
-  display: flex;
+ 
   max-height: 400px;
   & > table {
     width: 100%;
@@ -115,11 +115,12 @@ export const TableContainer = styled.div`
     border-radius: 4px;
     font-size: 12pt;
     border-collapse: collapse;
-
+    
     & > tr {
       padding: 8px 4px;
       & > td,
       th {
+        
         padding: 0.5em;
         margin: auto;
         border: 1px solid lightgrey;

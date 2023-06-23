@@ -1,12 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  AddIcon,
-  GridContainer,
-  Heading,
-  Heading2,
-  LightText,
-  LinkText,
-} from "../../Global";
+import { BackNavigator, GridContainer, Heading2, LightText } from "../../Global";
 import { MenuBar } from "./Main.elements";
 
 import logo2 from "../../assets/logo2.png";
@@ -20,33 +13,19 @@ import ListItemText from "@mui/material/ListItemText";
 import Collapse from "@mui/material/Collapse";
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
-import { Outlet, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import {
-  AddCircle,
-  AddCircleOutlineOutlined,
   DashboardRounded,
   DocumentScanner,
   ForkRight,
+  KeyboardArrowLeft,
   LowPriority,
   TableChart,
 } from "@mui/icons-material";
-import {
-  FormControl,
-  InputLabel,
-  Select,
-  OutlinedInput,
-  Checkbox,
-  MenuItem,
-  Button,
-} from "@mui/material";
+
 import ActiveSprintScreen from "./helpers/ActiveSprintScreen";
 
-
-import {
-  useAddProjectMutation,
-  useGetProjectsQuery,
-  useGetSingleProjectQuery,
-} from "../../api/endpoints/projectEndpoint";
+import { useGetSingleProjectQuery } from "../../api/endpoints/projectEndpoint";
 
 import { useSelector, useDispatch } from "react-redux";
 import { setProjectData } from "../../reduxSlices/projectsSlice";
@@ -54,13 +33,7 @@ import { setProjectData } from "../../reduxSlices/projectsSlice";
 function Dashboard() {
   const { id } = useParams();
   const dispatch = useDispatch();
-  const [selectedProject, setSelectedProject] = useState("");
 
-  const {
-    data: projects,
-    isLoading: isProjectLoading,
-    isSuccess: isProjectSuccess,
-  } = useGetProjectsQuery();
   const {
     data: singleProject,
     isLoading: isSingleProjectLoading,
@@ -69,11 +42,8 @@ function Dashboard() {
 
   const [open, setOpen] = useState(true);
   const [activeTab, setActiveTab] = useState("sprint");
-  const [projectId, setProjectId] = useState();
-  const [isAddingProject, setAddingProject] = useState(false);
-  const [isChangingProject, setChangingProject] = useState(false);
 
-  
+  const navigate = useNavigate();
 
   function renderBody() {
     if (activeTab === "sprint") {
@@ -96,35 +66,27 @@ function Dashboard() {
   const data = useSelector((state) => state.project);
   console.log(data);
   return (
-    <GridContainer style={{ height: "calc(100vh - 65px)" }} columns="250px 1fr">
+    <GridContainer
+      style={{ height: "calc(100vh - 65px)", background: "#fff" }}
+      columns="250px 1fr"
+    >
       <MenuBar place="flex-start">
-        <GridContainer columns="auto auto" justify="space-between">
-          <LinkText onClick={() => setChangingProject(!isChangingProject)}>
-            {isChangingProject ? "Close" : "Change"}
-          </LinkText>
-          <AddIcon onClick={() => setAddingProject(true)} />
+        <BackNavigator
+          columns="auto auto"
+          justify="flex-start"
+          onClick={() => navigate("/home")}
+        >
+          <KeyboardArrowLeft></KeyboardArrowLeft>
+          <LightText>Back to Projects</LightText>
+        </BackNavigator>
+
+        <GridContainer columns="1fr 3fr">
+          <img height="40px" src={logo2}></img>
+          <div>
+            <Heading2>{singleProject?.title}</Heading2>
+            <LightText>Software Project</LightText>
+          </div>
         </GridContainer>
-        {isChangingProject ? (
-          <Select
-            value={selectedProject}
-            onChange={(e) => {
-              setSelectedProject(e.target.value);
-              setChangingProject(false);
-            }}
-          >
-            {projects?.map((obj) => {
-              return <MenuItem value={obj._id}>{obj.title}</MenuItem>;
-            })}
-          </Select>
-        ) : (
-          <GridContainer columns="1fr 3fr">
-            <img height="40px" src={logo2}></img>
-            <div>
-              <Heading2>{singleProject?.title}</Heading2>
-              <LightText>Software Project</LightText>
-            </div>
-          </GridContainer>
-        )}
 
         <List
           sx={{ width: "100%", bgcolor: "background.paper" }}

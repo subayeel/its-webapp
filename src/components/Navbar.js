@@ -4,7 +4,7 @@ import { Link, Outlet, useNavigate } from "react-router-dom";
 import ReactModal from "react-modal";
 import {
   LogoText,
-  NavContainer,
+  NavContainer,NavWrapper,
   NavLinks,
   SearchBtn,
 } from "./components.elements";
@@ -205,215 +205,215 @@ function Navbar() {
       .catch((err) => {
         console.log(err);
       });
-    navigate("/login");
+    navigate("/");
   }
   return (
     <>
-      <ReactModal
-        isOpen={isAddingModal}
-        onRequestClose={closeModal}
-        style={customStyle}
-      >
-        <GridContainer
-          style={{ borderBottom: "2px solid #ddd" }}
-          padding="1rem"
-          justify="space-between"
-          columns="auto auto"
+      <NavContainer>
+        <ReactModal
+          isOpen={isAddingModal}
+          onRequestClose={closeModal}
+          style={customStyle}
         >
-          <Heading2>Create Issue</Heading2>
-          <Close onClick={() => setAddingModal(false)} />
-        </GridContainer>
-
-        <GridContainer
-          style={{ overflowY: "scroll", height: "300px" }}
-          justify="flex-start"
-          place="flex-start"
-          columns="1fr"
-          padding="1rem"
-        >
-          <LightText>
-            Project Name: <Heading2>{data.title}</Heading2>
-          </LightText>
-
-          <TextField
-            label="Issue Title"
-            value={issueData.title}
-            onChange={(e) => {
-              dispatch({ type: ACTION.title, payload: e.target.value });
-            }}
-          ></TextField>
-          <FormControl fullWidth>
-            <InputLabel id="issue-label">Issue Type *</InputLabel>
-            <Select
-              fullWidth
-              sx={{ width: "280px" }}
-              labelId="issue-label"
-              value={issueData.issueType}
-              label="Issue Type *"
-              onChange={(e) => {
-                dispatch({ type: ACTION.issueType, payload: e.target.value });
-              }}
-            >
-              {dummyIssues.map((dp) => {
-                return <MenuItem value={dp.type}>{dp.type}</MenuItem>;
-              })}
-            </Select>
-          </FormControl>
-          <HLine />
-
-          <FormControl fullWidth>
-            <InputLabel id="status-label">Status</InputLabel>
-            <Select
-              fullWidth
-              sx={{ width: "280px" }}
-              labelId="status-label"
-              value={issueData.status}
-              label="Status *"
-              onChange={(e) => {
-                dispatch({ type: ACTION.status, payload: e.target.value });
-              }}
-            >
-              {dummyStatus.map((dp) => {
-                return <MenuItem value={dp.key}>{dp.status}</MenuItem>;
-              })}
-            </Select>
-          </FormControl>
-
-          <TextField
-            label="Description"
-            value={issueData.description}
-            onChange={(e) => {
-              dispatch({ type: ACTION.description, payload: e.target.value });
-            }}
-          ></TextField>
-
-          <HLine />
-
-          <FormControl fullWidth>
-            <InputLabel id="status-label">Reporter</InputLabel>
-            <Select
-              fullWidth
-              sx={{ width: "280px" }}
-              labelId="status-label"
-              value={issueData.reporter}
-              label="Reporter *"
-              onChange={(e) => {
-                dispatch({ type: ACTION.reporter, payload: e.target.value });
-              }}
-            >
-              {employees.map((dp) => {
-                return <MenuItem value={dp}>{dp}</MenuItem>;
-              })}
-            </Select>
-          </FormControl>
-
-          <FormControl sx={{ width: 300 }}>
-            <InputLabel id="demo-multiple-checkbox-label">Assignee</InputLabel>
-            <Select
-              labelId="demo-multiple-checkbox-label"
-              multiple
-              value={personName}
-              onChange={handleChange}
-              input={<OutlinedInput label="Assignee" />}
-              renderValue={(selected) => selected.join(", ")}
-              MenuProps={MenuProps}
-            >
-              {employees.map((name) => (
-                <MenuItem key={name} value={name}>
-                  <Checkbox checked={personName.indexOf(name) > -1} />
-                  <ListItemText primary={name} />
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-
-          <HLine />
-          <FormControl fullWidth>
-            <InputLabel id="status-label">Priority</InputLabel>
-            <Select
-              fullWidth
-              sx={{ width: "280px" }}
-              labelId="status-label"
-              value={issueData.priority}
-              label="Priority *"
-              onChange={(e) => {
-                dispatch({ type: ACTION.priority, payload: e.target.value });
-              }}
-            >
-              {dummyPriority.map((dp) => {
-                return <MenuItem value={dp.type}>{dp.type}</MenuItem>;
-              })}
-            </Select>
-          </FormControl>
-          <FormControl fullWidth>
-            <InputLabel id="status-label">Sprint</InputLabel>
-            <Select
-              fullWidth
-              sx={{ width: "280px" }}
-              labelId="status-label"
-              value={issueData.sprint}
-              label="Sprint"
-              onChange={(e) => {
-                dispatch({ type: ACTION.sprint, payload: e.target.value });
-              }}
-            >
-              {dummySprint.map((dp) => {
-                return <MenuItem value={dp.type}>{dp.type}</MenuItem>;
-              })}
-            </Select>
-          </FormControl>
-        </GridContainer>
-        <Absolute width="100%" bottom="0">
           <GridContainer
+            style={{ borderBottom: "2px solid #ddd" }}
+            padding="1rem"
             justify="space-between"
-            style={{ borderTop: "2px solid #ddd" }}
-            padding="0 0.7rem"
             columns="auto auto"
           >
-            <TextButton onClick={() => setAddingModal(false)}>
-              Cancel
-            </TextButton>
-            <Button variant="contained" onClick={handleSubmit}>
-              Create
-            </Button>
+            <Heading2>Create Issue</Heading2>
+            <Close onClick={() => setAddingModal(false)} />
           </GridContainer>
-        </Absolute>
-      </ReactModal>
-      <NavContainer>
-        <GridContainer columns="auto 1fr">
-          <img height="40px" src={logo}></img>
-          <LogoText>Atom</LogoText>
-        </GridContainer>
 
-        <NavLinks>
-          <li>
-            <Link>Your Work</Link>
-          </li>
-          <li>
-            <Link>Projects</Link>
-          </li>
-          <li>
-            <Link>Filters</Link>
-          </li>
-          <li>
-            <Link>Dashboards</Link>
-          </li>
-          <Button onClick={openModal} variant="contained">
+          <GridContainer
+            style={{ overflowY: "scroll", height: "300px" }}
+            justify="flex-start"
+            place="flex-start"
+            columns="1fr"
+            padding="1rem"
+          >
+            <LightText>
+              Project Name: <Heading2>{data.title}</Heading2>
+            </LightText>
+
+            <TextField
+              label="Issue Title"
+              value={issueData.title}
+              onChange={(e) => {
+                dispatch({ type: ACTION.title, payload: e.target.value });
+              }}
+            ></TextField>
+            <FormControl fullWidth>
+              <InputLabel id="issue-label">Issue Type *</InputLabel>
+              <Select
+                fullWidth
+                sx={{ width: "280px" }}
+                labelId="issue-label"
+                value={issueData.issueType}
+                label="Issue Type *"
+                onChange={(e) => {
+                  dispatch({ type: ACTION.issueType, payload: e.target.value });
+                }}
+              >
+                {dummyIssues.map((dp) => {
+                  return <MenuItem value={dp.type}>{dp.type}</MenuItem>;
+                })}
+              </Select>
+            </FormControl>
+            <HLine />
+
+            <FormControl fullWidth>
+              <InputLabel id="status-label">Status</InputLabel>
+              <Select
+                fullWidth
+                sx={{ width: "280px" }}
+                labelId="status-label"
+                value={issueData.status}
+                label="Status *"
+                onChange={(e) => {
+                  dispatch({ type: ACTION.status, payload: e.target.value });
+                }}
+              >
+                {dummyStatus.map((dp) => {
+                  return <MenuItem value={dp.key}>{dp.status}</MenuItem>;
+                })}
+              </Select>
+            </FormControl>
+
+            <TextField
+              label="Description"
+              value={issueData.description}
+              onChange={(e) => {
+                dispatch({ type: ACTION.description, payload: e.target.value });
+              }}
+            ></TextField>
+
+            <HLine />
+
+            <FormControl fullWidth>
+              <InputLabel id="status-label">Reporter</InputLabel>
+              <Select
+                fullWidth
+                sx={{ width: "280px" }}
+                labelId="status-label"
+                value={issueData.reporter}
+                label="Reporter *"
+                onChange={(e) => {
+                  dispatch({ type: ACTION.reporter, payload: e.target.value });
+                }}
+              >
+                {employees.map((dp) => {
+                  return <MenuItem value={dp}>{dp}</MenuItem>;
+                })}
+              </Select>
+            </FormControl>
+
+            <FormControl sx={{ width: 300 }}>
+              <InputLabel id="demo-multiple-checkbox-label">
+                Assignee
+              </InputLabel>
+              <Select
+                labelId="demo-multiple-checkbox-label"
+                multiple
+                value={personName}
+                onChange={handleChange}
+                input={<OutlinedInput label="Assignee" />}
+                renderValue={(selected) => selected.join(", ")}
+                MenuProps={MenuProps}
+              >
+                {employees.map((name) => (
+                  <MenuItem key={name} value={name}>
+                    <Checkbox checked={personName.indexOf(name) > -1} />
+                    <ListItemText primary={name} />
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+
+            <HLine />
+            <FormControl fullWidth>
+              <InputLabel id="status-label">Priority</InputLabel>
+              <Select
+                fullWidth
+                sx={{ width: "280px" }}
+                labelId="status-label"
+                value={issueData.priority}
+                label="Priority *"
+                onChange={(e) => {
+                  dispatch({ type: ACTION.priority, payload: e.target.value });
+                }}
+              >
+                {dummyPriority.map((dp) => {
+                  return <MenuItem value={dp.type}>{dp.type}</MenuItem>;
+                })}
+              </Select>
+            </FormControl>
+            <FormControl fullWidth>
+              <InputLabel id="status-label">Sprint</InputLabel>
+              <Select
+                fullWidth
+                sx={{ width: "280px" }}
+                labelId="status-label"
+                value={issueData.sprint}
+                label="Sprint"
+                onChange={(e) => {
+                  dispatch({ type: ACTION.sprint, payload: e.target.value });
+                }}
+              >
+                {dummySprint.map((dp) => {
+                  return <MenuItem value={dp.type}>{dp.type}</MenuItem>;
+                })}
+              </Select>
+            </FormControl>
+          </GridContainer>
+          <Absolute width="100%" bottom="0">
+            <GridContainer
+              justify="space-between"
+              style={{ borderTop: "2px solid #ddd" }}
+              padding="0 0.7rem"
+              columns="auto auto"
+            >
+              <TextButton onClick={() => setAddingModal(false)}>
+                Cancel
+              </TextButton>
+              <Button variant="contained" onClick={handleSubmit}>
+                Create
+              </Button>
+            </GridContainer>
+          </Absolute>
+        </ReactModal>
+        <NavWrapper>
+          <GridContainer columns="auto 1fr">
+            <img height="40px" src={logo}></img>
+            <LogoText>Atom</LogoText>
+          </GridContainer>
+
+          <NavLinks>
+            <li>
+              <Link>Your Work</Link>
+            </li>
+            <li>
+              <Link to="/home">Projects</Link>
+            </li>
+            <li>
+              <Link>Filters</Link>
+            </li>
+            <li>
+              <Link>Dashboards</Link>
+            </li>
+            {/* <Button onClick={openModal} variant="contained">
             Create
-          </Button>
-        </NavLinks>
-        {/* <TextField label="Search" margin="dense"></TextField> */}
-        <CenterFlexContainer>
-          <SearchField />
-          {/* <SearchBtn>
-            Search &nbsp;
-            <FaSearch />
-          </SearchBtn> */}
-        </CenterFlexContainer>
+          </Button> */}
+          </NavLinks>
+          {/* <TextField label="Search" margin="dense"></TextField> */}
+          <CenterFlexContainer>
+            <SearchField />
+          </CenterFlexContainer>
 
-        <Button variant="outlined" onClick={handleLogout}>
-          Logout
-        </Button>
+          <Button variant="outlined" onClick={handleLogout}>
+            Logout
+          </Button>
+        </NavWrapper>
       </NavContainer>
       <Outlet />
     </>

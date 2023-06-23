@@ -7,11 +7,18 @@ const developerEndpoint = apiSlice.injectEndpoints({
         url: `/register/developer/`,
         method: "POST",
         body: data,
-
       }),
-      invalidatesTags:["Developer"]
+      invalidatesTags: ["Developer"],
+    }),
+    deleteDeveloper: builder.mutation({
+      query: (data) => ({
+        url: `/developer/${data.id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["Developer"],
     }),
   }),
 });
 
 export const { useAddDeveloperMutation } = developerEndpoint;
+export const { useDeleteDeveloperMutation } = developerEndpoint;

@@ -1,4 +1,5 @@
 import { AddCircleOutlineOutlined } from "@mui/icons-material";
+import { Grid } from "@mui/material";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 
@@ -100,7 +101,7 @@ export const TextField = styled.input`
 `;
 
 export const HeroText = styled.h1`
-  color: #6B7EBF;
+  color: #6b7ebf;
   font-size: 32px;
   font-weight: 700;
   letter-spacing: 0.5px;
@@ -144,5 +145,14 @@ export const AddIcon = styled(AddCircleOutlineOutlined)`
   &:hover {
     color: #2024ea;
     cursor: pointer;
+  }
+`;
+
+export const BackNavigator = styled(GridContainer)`
+  &:hover {
+    cursor: pointer;
+    & > p {
+      color: #000;
+    }
   }
 `;

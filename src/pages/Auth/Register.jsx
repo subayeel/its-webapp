@@ -36,7 +36,7 @@ function Register() {
 
       if (registerUser.status == 201) {
         console.log("Registered");
-        navigate("/login");
+        navigate("/");
       }
     } catch (err) {
       if (err.response.status === 409) {
