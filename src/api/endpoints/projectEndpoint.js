@@ -26,6 +26,14 @@ const projectEndPoints = apiSlice.injectEndpoints({
       }),
       invalidatesTags: ["Project"],
     }),
+    deleteProject: builder.mutation({
+      query: (data) => ({
+        url: `/project/${data.id}`,
+        method: "DELETE",
+        body: data,
+      }),
+      invalidatesTags: ["Projects"],
+    }),
     updateProjectTicketStatus: builder.mutation({
       query: (data) => ({
         url: `/project/updateTicketStatus?id=${data.id}`,
@@ -56,6 +64,7 @@ const projectEndPoints = apiSlice.injectEndpoints({
 });
 
 export const { useAddProjectMutation } = projectEndPoints;
+export const { useDeleteProjectMutation } = projectEndPoints;
 export const { useUpdateProjectTicketStatusMutation } = projectEndPoints;
 export const { useGetProjectsQuery } = projectEndPoints;
 export const { useGetSingleProjectQuery } = projectEndPoints;

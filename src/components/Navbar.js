@@ -1,10 +1,11 @@
 import React, { useReducer, useState } from "react";
 import logo from "../assets/atom.png";
-import { Link, Outlet, useNavigate } from "react-router-dom";
+import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import ReactModal from "react-modal";
 import {
   LogoText,
-  NavContainer,NavWrapper,
+  NavContainer,
+  NavWrapper,
   NavLinks,
   SearchBtn,
 } from "./components.elements";
@@ -39,6 +40,7 @@ import { useSelector } from "react-redux";
 import { useAddProjectTicketMutation } from "../api/endpoints/projectEndpoint";
 import { useDispatch } from "react-redux";
 import { setProjectData } from "../reduxSlices/projectsSlice";
+import { useGetDeveloperQuery } from "../api/endpoints/managerEndpoint";
 
 const ACTION = {
   projectId: "handleProjectId",
@@ -52,8 +54,15 @@ const ACTION = {
   title: "handleTitle",
 };
 function Navbar() {
+  const location = useLocation();
+
   const [addTicket, { isLoading: isAddTicketLoading }] =
     useAddProjectTicketMutation();
+  const {
+    data: myDevelopers,
+    isLoading: isDevelopersLoading,
+    isSuccess: isDevelopersSuccess,
+  } = useGetDeveloperQuery();
 
   const navigate = useNavigate();
   const data = useSelector((state) => state.project);
@@ -61,31 +70,9 @@ function Navbar() {
   const dispatchRedux = useDispatch();
 
   const [isAddingModal, setAddingModal] = useState(false);
-  const [personName, setPersonName] = useState([]);
-  const [assigneeNames, setAssigneeNames] = useState([]);
-  const employees = [
-    "Oliver Hansen",
-    "Van Henry",
-    "April Tucker",
-    "Ralph Hubbard",
-    "Omar Alexander",
-    "Carlos Abbott",
-    "Miriam Wagner",
-    "Bradley Wilkerson",
-    "Virginia Andrews",
-    "Kelly Snyder",
-  ];
-  const handleChange = (event) => {
-    const {
-      target: { value },
-    } = event;
-    setPersonName(
-      // On autofill we get a stringified value.
-      typeof value === "string" ? value.split(",") : value
-    );
 
-    dispatch({ type: ACTION.assignee, payload: value });
-  };
+  
+  
 
   function reducer(state, action) {
     switch (action.type) {
@@ -113,7 +100,7 @@ function Navbar() {
           issueType: "",
           status: "",
           description: "",
-          assignee: [],
+          assignee: "",
           reporter: "",
           priority: "",
           title: "",
@@ -124,7 +111,7 @@ function Navbar() {
     issueType: "",
     status: "",
     description: "",
-    assignee: [],
+    assignee: "",
     reporter: "",
     priority: "",
     title: "",
@@ -135,11 +122,7 @@ function Navbar() {
   function closeModal() {
     setAddingModal(false);
   }
-  const dummyProject = [
-    { id: 1, projectTitle: "ABC Software" },
-    { id: 2, projectTitle: "XYZ System" },
-    { id: 3, projectTitle: "ASD Project" },
-  ];
+ 
   const dummyIssues = [
     { id: 1, type: "Task" },
     { id: 2, type: "Story" },
@@ -165,16 +148,7 @@ function Navbar() {
     { id: 4, type: "Sprint 4" },
   ];
 
-  const ITEM_HEIGHT = 48;
-  const ITEM_PADDING_TOP = 8;
-  const MenuProps = {
-    PaperProps: {
-      style: {
-        maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-        width: 250,
-      },
-    },
-  };
+  
 
   async function handleSubmit() {
     const response = await addTicket({
@@ -198,7 +172,7 @@ function Navbar() {
   const production = "https://its-backend.onrender.com";
   async function handleLogout() {
     axios
-      .get(localApi + "/logout")
+      .get(production + "/logout")
       .then((res) => {
         console.log(res.data);
       })
@@ -302,8 +276,8 @@ function Navbar() {
                   dispatch({ type: ACTION.reporter, payload: e.target.value });
                 }}
               >
-                {employees.map((dp) => {
-                  return <MenuItem value={dp}>{dp}</MenuItem>;
+                {myDevelopers?.map((dp) => {
+                  return <MenuItem value={dp.fullName}>{dp.fullName}</MenuItem>;
                 })}
               </Select>
             </FormControl>
@@ -314,19 +288,15 @@ function Navbar() {
               </InputLabel>
               <Select
                 labelId="demo-multiple-checkbox-label"
-                multiple
-                value={personName}
-                onChange={handleChange}
-                input={<OutlinedInput label="Assignee" />}
-                renderValue={(selected) => selected.join(", ")}
-                MenuProps={MenuProps}
+                value={issueData.assignee}
+                onChange={(e) => {
+                  dispatch({ type: ACTION.assignee, payload: e.target.value });
+                }}
+                label="Assignee *"
               >
-                {employees.map((name) => (
-                  <MenuItem key={name} value={name}>
-                    <Checkbox checked={personName.indexOf(name) > -1} />
-                    <ListItemText primary={name} />
-                  </MenuItem>
-                ))}
+                {myDevelopers?.map((dp) => {
+                  return <MenuItem value={dp.fullName}>{dp.fullName}</MenuItem>;
+                })}
               </Select>
             </FormControl>
 
@@ -401,16 +371,26 @@ function Navbar() {
             <li>
               <Link>Dashboards</Link>
             </li>
-            {/* <Button onClick={openModal} variant="contained">
-            Create
-          </Button> */}
+            {location.pathname.split("/").includes("project") && (
+              <Button
+                style={{ background: "#6B7EBF" }}
+                onClick={openModal}
+                variant="contained"
+              >
+                Create
+              </Button>
+            )}
           </NavLinks>
           {/* <TextField label="Search" margin="dense"></TextField> */}
           <CenterFlexContainer>
             <SearchField />
           </CenterFlexContainer>
 
-          <Button variant="outlined" onClick={handleLogout}>
+          <Button
+            variant="container"
+            style={{ background: "#224368", color: "white", fontWeight: "600" }}
+            onClick={handleLogout}
+          >
             Logout
           </Button>
         </NavWrapper>

@@ -16,6 +16,7 @@ import { TableContainer } from "./Main.elements";
 import {
   useAddProjectMutation,
   useGetProjectsQuery,
+  useDeleteProjectMutation,
 } from "../../api/endpoints/projectEndpoint";
 
 import { useNavigate } from "react-router-dom";
@@ -61,6 +62,8 @@ const Home = memo(() => {
   //RTK Query
   const [addProject, { isLoading: isAddProjectLoading }] =
     useAddProjectMutation();
+  const [deleteProject, { isLoading: isDeleteProjectLoading }] =
+    useDeleteProjectMutation();
   const [addDeveloper, { isLoading: isAddDeveloperLoading }] =
     useAddDeveloperMutation();
   const [deleteDeveloper, { isLoading: isDeleteDeveloperLoading }] =
@@ -147,6 +150,14 @@ const Home = memo(() => {
   async function handleDeleteDeveloper(did) {
     try {
       const response = await deleteDeveloper({ id: did });
+    } catch (e) {
+      console.log(e);
+    }
+  }
+  //TODO :create delete endpoint
+  async function handleDeleteProject(pid) {
+    try {
+      const response = await deleteProject({ id: pid });
     } catch (e) {
       console.log(e);
     }
@@ -264,25 +275,34 @@ const Home = memo(() => {
               <TableContainer>
                 <table>
                   <tr>
-                    <th>S.No</th>
-                    <th>Title</th>
-                    <th>Ticket Count</th>
+                    <th>Project</th>
+                    <th>Tickets Count</th>
                     <th>Employees Count</th>
                     <th>Action</th>
                   </tr>
                   {projects?.map((obj, i) => {
                     return (
                       <tr>
-                        <td>{i}</td>
                         <td>{obj.title}</td>
                         <td>{obj.tickets.length}</td>
                         <td>{obj.employees.length}</td>
                         <td>
-                          <Button
-                            onClick={() => navigate(`/project/${obj._id}`)}
-                          >
-                            View
-                          </Button>
+                          <CenterFlexContainer>
+                            <Button
+                              onClick={() => navigate(`/project/${obj._id}`)}
+                            >
+                              View
+                            </Button>
+                            <Button
+                              style={{
+                                background: "#D85959",
+                                color: "white",
+                              }}
+                              onClick={() => handleDeleteProject(obj._id)}
+                            >
+                              Delete
+                            </Button>
+                          </CenterFlexContainer>
                         </td>
                       </tr>
                     );

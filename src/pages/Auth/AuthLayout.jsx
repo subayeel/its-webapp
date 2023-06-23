@@ -22,7 +22,7 @@ function AuthLayout() {
       <Outlet />
       <footer>
         <CenterFlexContainer>
-          <LightText>&#169; Copyright reserved 2022-2023</LightText>
+          <LightText>&#169; Copyright 2022-2023</LightText>
         </CenterFlexContainer>
       </footer>
     </>

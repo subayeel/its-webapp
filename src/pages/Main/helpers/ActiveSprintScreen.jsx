@@ -10,6 +10,7 @@ import {
   LightText,
   Absolute,
   TextButton,
+  MainContainer,
 } from "../../../Global";
 import {
   JobSmallText,
@@ -19,7 +20,6 @@ import {
 } from "../Main.elements";
 
 import { HLine } from "../../../Global";
-
 
 import { Heading2 } from "../../../Global";
 import { Close, Delete } from "@mui/icons-material";
@@ -486,8 +486,9 @@ function ActiveSprintScreen() {
                                 ref={provided.innerRef}
                                 style={{
                                   userSelect: "none",
-                                  width: "max-content",
-
+                                  display: "grid",
+                                  width: "calc(100% - 16px - 2rem)",
+                                  gridTemplateColumns: "1fr",
                                   margin: "4px 8px",
                                   backgroundColor: snapshot.isDragging
                                     ? "#CBCBCB "
@@ -495,32 +496,30 @@ function ActiveSprintScreen() {
                                   ...provided.draggableProps.style,
                                 }}
                               >
-                                <Container width="100%" align="flex-start">
-                                  <GridContainer columns="1fr auto" width="100%">
-                                    <JobSubTitle>{item.title}</JobSubTitle>
-                                    <Delete onClick={()=>handleDeleteTicket(item._id)} />
-                                  </GridContainer>
-                                  <TileHeading>{item.description}</TileHeading>
-                                  <JobSmallText>
-                                    Priority:{item.priority}
-                                  </JobSmallText>
-                                </Container>
+                                <GridContainer columns="1fr auto" width="100%">
+                                  <JobSubTitle>{item.title}</JobSubTitle>
+                                  <Delete
+                                    onClick={() => handleDeleteTicket(item._id)}
+                                  />
+                                </GridContainer>
+                                <TileHeading>{item.description}</TileHeading>
+                                <JobSmallText>
+                                  Priority:&nbsp;{item.priority}
+                                </JobSmallText>
+
                                 <GridContainer
                                   justify="flex-start"
                                   gap="0"
                                   columns="auto auto"
                                 >
-                                  <LightText>Reporter:</LightText>
+                                  <LightText>Reporter:&nbsp;</LightText>
                                   <LightText>{item.reporter}</LightText>
                                 </GridContainer>
+                                <HLine />
                                 <CenterFlexContainer justify="space-between">
                                   <Container align="flex-start">
-                                    <LightText>Assignee:</LightText>
-                                    <CenterFlexContainer>
-                                      {item.assignee?.map((assgn) => (
-                                        <SkillTile>{assgn}</SkillTile>
-                                      ))}
-                                    </CenterFlexContainer>
+                                    <LightText>Assignee:&nbsp;</LightText>
+                                    <LightText>{item.assignee}</LightText>
                                   </Container>
 
                                   <Button onClick={() => openModal(item._id)}>

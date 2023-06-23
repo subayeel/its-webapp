@@ -1,5 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { BackNavigator, GridContainer, Heading2, LightText } from "../../Global";
+import {
+  BackNavigator,
+  GridContainer,
+  Heading2,
+  LightText,
+  MainContainer,
+} from "../../Global";
 import { MenuBar } from "./Main.elements";
 
 import logo2 from "../../assets/logo2.png";
@@ -64,7 +70,7 @@ function Dashboard() {
     );
   }, [singleProject]);
   const data = useSelector((state) => state.project);
-  console.log(data);
+
   return (
     <GridContainer
       style={{ height: "calc(100vh - 65px)", background: "#fff" }}

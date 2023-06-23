@@ -22,8 +22,8 @@ import logo from "../../assets/atom.png";
 
 import axios from "axios";
 import { LoginContainer, AuthNav } from "./Auth.elements";
-const LOGIN_URL = "http://localhost:5000/auth";
-// const LOGIN_URL = "https://its-backend.onrender.com/auth";
+// const LOGIN_URL = "http://localhost:5000/auth";
+const LOGIN_URL = "https://its-backend.onrender.com/auth";
 function Login() {
   const navigate = useNavigate();
   const location = useLocation();
