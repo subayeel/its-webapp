@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { GridContainer, Container,CenterFlexContainer } from "../../Global";
+import { GridContainer, Container, CenterFlexContainer } from "../../Global";
 
 export const MenuBar = styled(GridContainer)`
   box-sizing: border-box;
@@ -14,7 +14,7 @@ export const KanbanContainer = styled.div`
   width: 100%;
   overflow: auto;
   white-space: nowrap;
-  &::-webkit-scrollbar{
+  &::-webkit-scrollbar {
     display: none;
   }
   > div {
@@ -56,7 +56,6 @@ export const JobTitleText = styled.p`
   letter-spacing: 1px;
   width: 100%;
   color: #000;
-  
 `;
 export const JobSubTitle = styled.p`
   margin: 0;
@@ -78,7 +77,7 @@ export const TileHeading = styled.p`
   margin: 0.2rem 0;
   font-weight: ${(props) => (props.active ? "400" : "700")};
   font-size: ${(props) => (props.active ? "16px" : "14px")};
-  
+
   color: ${(props) => (props.active ? props.theme.colors.atsBlue : "#6c6c6c")};
   &:hover {
     cursor: pointer;
@@ -103,4 +102,32 @@ export const SkillTile = styled(CenterFlexContainer)`
   padding: 0.2rem 0.5rem;
   font-size: 12px;
   border-radius: 4px;
+`;
+
+export const TableContainer = styled.div`
+  display: flex;
+  max-height: 400px;
+  & > table {
+    width: 100%;
+    color: #666;
+    background: white;
+    border: 1px solid grey;
+    border-radius: 4px;
+    font-size: 12pt;
+    border-collapse: collapse;
+
+    & > tr {
+      padding: 8px 4px;
+      & > td,
+      th {
+        padding: 0.5em;
+        margin: auto;
+        border: 1px solid lightgrey;
+        border-radius: 4px;
+      }
+      th {
+        font-weight: 500;
+      }
+    }
+  }
 `;

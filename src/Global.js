@@ -60,19 +60,17 @@ export const CardContainer = styled(CenterFlexContainer)`
   justify-content: flex-start;
   align-items: flex-start;
   background-color: #fff;
-  border-radius: 8px;
+  border-radius: 4px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12), 0 2px 4px rgba(0, 0, 0, 0.24);
-
+  & > div {
+    width: 100%;
+  }
   @media screen and (max-width: 768px) {
     /* width: 100%; */
-    padding: 0.7rem;
-    margin: 0.2rem;
-    border-radius: 20px;
+    /* padding: 0.7rem;
+    margin: 0.2rem; */
+    /* border-radius: 4px; */
     /* display: none; */
-
-    & > div {
-      width: 100%;
-    }
   }
 `;
 
@@ -102,13 +100,12 @@ export const TextField = styled.input`
 `;
 
 export const HeroText = styled.h1`
-  text-align: center;
-  color: #6c6c6c;
+  color: #6B7EBF;
   font-size: 32px;
   font-weight: 700;
   letter-spacing: 0.5px;
   width: 100%;
-  margin: 0 0 1rem 0;
+  margin: 0;
 `;
 export const Heading = styled.h1`
   font-size: 22px;

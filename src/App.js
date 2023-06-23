@@ -7,6 +7,7 @@ import Register from "./pages/Auth/Register";
 import Home from "./pages/Main/Home";
 import RequireAuth from "./pages/Auth/RequireAuth";
 import Unauthorized from "./pages/Auth/Unauthorized";
+import AuthLayout from "./pages/Auth/AuthLayout";
 
 const ROLES = {
   Candidate: 2001,
@@ -18,16 +19,18 @@ function App() {
       <Router>
         <Routes>
           <Route element={<PersistLogin />}>
-            <Route element={<Login />} path="/login"></Route>
-            <Route element={<Register />} path="/register"></Route>
+            {/* <Route element={<Login />} path="/"></Route> */}
+            <Route element={<AuthLayout />} path="/">
+              <Route element={<Login />} path="/"></Route>
+              <Route element={<Register />} path="/register"></Route>
+            </Route>
             <Route element={<Unauthorized />} path="/unauthorized"></Route>
             <Route element={<RequireAuth allowedRoles={ROLES.Candidate} />}>
               <Route element={<Navbar />}>
                 <Route element={<Dashboard />} path="/project/:id"></Route>
+                <Route element={<Home />} path="/home"></Route>
+                <Route element={<Home />} path="/its-webapp"></Route>
               </Route>
-              
-              <Route element={<Home />} path="/home"></Route>
-              <Route element={<Home />} path="/its-webapp"></Route>
             </Route>
           </Route>
         </Routes>

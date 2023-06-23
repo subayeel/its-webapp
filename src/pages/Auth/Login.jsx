@@ -18,10 +18,12 @@ import { useDispatch } from "react-redux";
 import { setCredentials } from "../../api/auth/authSlice";
 import { useNavigate, useLocation, Link } from "react-router-dom";
 
+import logo from "../../assets/atom.png";
+
 import axios from "axios";
-import { LoginContainer } from "./Auth.elements";
-// const LOGIN_URL = "http://localhost:5000/auth";
-const LOGIN_URL = "https://its-backend.onrender.com/auth";
+import { LoginContainer, AuthNav } from "./Auth.elements";
+const LOGIN_URL = "http://localhost:5000/auth";
+// const LOGIN_URL = "https://its-backend.onrender.com/auth";
 function Login() {
   const navigate = useNavigate();
   const location = useLocation();
@@ -31,10 +33,9 @@ function Login() {
   const [pwd, setPwd] = useState("");
   const [error, setError] = useState("");
 
-  const { setAuth, persist, setPersist, auth } = useAuth();
+  const { setAuth, persist, setPersist } = useAuth();
 
   const handleSubmit = async () => {
-    
     try {
       const response = await axios.post(
         LOGIN_URL,
@@ -46,12 +47,14 @@ function Login() {
       );
 
       const accessToken = response?.data?.accessToken;
+      const userId = response?.data?.userId;
+
       const roles = response?.data?.roles;
 
       if (response.status === 200) {
         navigate("/home");
       }
-      setAuth({ user, pwd, roles, accessToken });
+      setAuth({ user, pwd, roles, accessToken, userId });
       dispatch(setCredentials({ ...response.data }));
       setUser("");
       setPwd("");
@@ -99,7 +102,7 @@ function Login() {
           onChange={(e) => setPwd(e.target.value)}
           onKeyDown={handleKeypress}
         />
-        
+
         {error && <ErrorContainer>{error}</ErrorContainer>}
         <LinkText to="/register">Not Registered?</LinkText>
 

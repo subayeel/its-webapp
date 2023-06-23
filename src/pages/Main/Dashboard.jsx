@@ -40,10 +40,8 @@ import {
   Button,
 } from "@mui/material";
 import ActiveSprintScreen from "./helpers/ActiveSprintScreen";
-import { useGetTicketsQuery } from "../../api/endpoints/ticketsEndpoint";
-import ReactModal from "react-modal";
-import { projectModalStyle } from "../../utils/modalStyles";
-import { TextField } from "@mui/material";
+
+
 import {
   useAddProjectMutation,
   useGetProjectsQuery,
@@ -58,9 +56,6 @@ function Dashboard() {
   const dispatch = useDispatch();
   const [selectedProject, setSelectedProject] = useState("");
 
-  //RTK Query
-  const [addProject, { isLoading: isAddProjectLoading }] =
-    useAddProjectMutation();
   const {
     data: projects,
     isLoading: isProjectLoading,
@@ -72,75 +67,17 @@ function Dashboard() {
     isSuccess: isSingleProjectSuccess,
   } = useGetSingleProjectQuery(id);
 
-  
   const [open, setOpen] = useState(true);
   const [activeTab, setActiveTab] = useState("sprint");
   const [projectId, setProjectId] = useState();
   const [isAddingProject, setAddingProject] = useState(false);
   const [isChangingProject, setChangingProject] = useState(false);
 
-  //adding project states
-  const [pTitle, setPTitle] = useState("");
-  const [pDesc, setPDesc] = useState("");
-  const [personName, setPersonName] = useState([]);
-  const [selectedEmployees, setSelectedEmployees] = useState([]);
-
-  const employees = [
-    "Oliver Hansen",
-    "Van Henry",
-    "April Tucker",
-    "Ralph Hubbard",
-    "Omar Alexander",
-    "Carlos Abbott",
-    "Miriam Wagner",
-    "Bradley Wilkerson",
-    "Virginia Andrews",
-    "Kelly Snyder",
-  ];
-  const ITEM_HEIGHT = 48;
-  const ITEM_PADDING_TOP = 8;
-  const MenuProps = {
-    PaperProps: {
-      style: {
-        maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-        width: 250,
-      },
-    },
-  };
-
-  const handleClick = () => {
-    setOpen(!open);
-  };
-
-  async function handleAddProject() {
-    await addProject({
-      title: pTitle,
-      description: pDesc,
-      employees: selectedEmployees,
-    });
-
-    setPDesc("");
-    setPTitle("");
-    setPersonName([]);
-    setSelectedEmployees([]);
-    setAddingProject(false);
-  }
-
-  const handleChange = (event) => {
-    const {
-      target: { value },
-    } = event;
-    setPersonName(
-      // On autofill we get a stringified value.
-      typeof value === "string" ? value.split(",") : value
-    );
-
-    setSelectedEmployees(value);
-  };
+  
 
   function renderBody() {
     if (activeTab === "sprint") {
-      return <ActiveSprintScreen ></ActiveSprintScreen>;
+      return <ActiveSprintScreen></ActiveSprintScreen>;
     }
   }
 
@@ -156,51 +93,10 @@ function Dashboard() {
       })
     );
   }, [singleProject]);
-  const data = useSelector((state)=>state.project);
+  const data = useSelector((state) => state.project);
   console.log(data);
   return (
     <GridContainer style={{ height: "calc(100vh - 65px)" }} columns="250px 1fr">
-      <ReactModal
-        onRequestClose={() => setAddingProject(false)}
-        isOpen={isAddingProject}
-        style={projectModalStyle}
-      >
-        <Heading>Add Project</Heading>
-        <GridContainer columns="1fr">
-          <TextField
-            label="Title"
-            value={pTitle}
-            onChange={(e) => setPTitle(e.target.value)}
-          ></TextField>
-          <TextField
-            label="Description"
-            value={pDesc}
-            onChange={(e) => setPDesc(e.target.value)}
-          ></TextField>
-          <FormControl sx={{ width: 300 }}>
-            <InputLabel id="demo-multiple-checkbox-label">Employees</InputLabel>
-            <Select
-              labelId="demo-multiple-checkbox-label"
-              multiple
-              value={personName}
-              onChange={handleChange}
-              input={<OutlinedInput label="Employees" />}
-              renderValue={(selected) => selected.join(", ")}
-              MenuProps={MenuProps}
-            >
-              {employees.map((name) => (
-                <MenuItem key={name} value={name}>
-                  <Checkbox checked={personName.indexOf(name) > -1} />
-                  <ListItemText primary={name} />
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-          <Button variant="contained" onClick={handleAddProject}>
-            Add Project
-          </Button>
-        </GridContainer>
-      </ReactModal>
       <MenuBar place="flex-start">
         <GridContainer columns="auto auto" justify="space-between">
           <LinkText onClick={() => setChangingProject(!isChangingProject)}>
@@ -240,7 +136,7 @@ function Dashboard() {
             </ListSubheader>
           }
         >
-          <ListItemButton onClick={handleClick}>
+          <ListItemButton>
             <ListItemIcon>
               <DashboardRounded />
             </ListItemIcon>

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { LoginContainer } from "./Auth.elements";
+import { LoginContainer, AuthNav } from "./Auth.elements";
 import {
   HLine,
   Heading,
@@ -10,6 +10,7 @@ import {
 import { Button, TextField } from "@mui/material";
 import axios from "../../api/axios";
 import { Link, useNavigate } from "react-router-dom";
+import logo from "../../assets/atom.png";
 
 function Register() {
   const [fullName, setFullName] = useState();
@@ -91,7 +92,7 @@ function Register() {
           onChange={(e) => setCPwd(e.target.value)}
           onKeyDown={handleKeypress}
         />
-        <LinkText to="/login">Already Member?</LinkText>
+        <LinkText to="/">Already Member?</LinkText>
 
         {error && <ErrorContainer>{error}</ErrorContainer>}
         <Button fullWidth variant="contained" onClick={handleSubmit}>
