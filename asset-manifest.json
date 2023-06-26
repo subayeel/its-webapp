@@ -1,16 +1,16 @@
 {
   "files": {
     "main.css": "/its-webapp/static/css/main.f4e001ed.css",
-    "main.js": "/its-webapp/static/js/main.2b3adcb5.js",
+    "main.js": "/its-webapp/static/js/main.4b5eed8f.js",
     "static/media/atom-bg.png": "/its-webapp/static/media/atom-bg.ad3a2e219ffbb5d40a27.png",
     "static/media/logo2.png": "/its-webapp/static/media/logo2.64135fe8e7edda4be4ce.png",
     "static/media/empty.png": "/its-webapp/static/media/empty.0b3c82f1ac2b7f09d199.png",
     "index.html": "/its-webapp/index.html",
     "main.f4e001ed.css.map": "/its-webapp/static/css/main.f4e001ed.css.map",
-    "main.2b3adcb5.js.map": "/its-webapp/static/js/main.2b3adcb5.js.map"
+    "main.4b5eed8f.js.map": "/its-webapp/static/js/main.4b5eed8f.js.map"
   },
   "entrypoints": [
     "static/css/main.f4e001ed.css",
-    "static/js/main.2b3adcb5.js"
+    "static/js/main.4b5eed8f.js"
   ]
 }
