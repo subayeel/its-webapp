@@ -90,7 +90,7 @@ const Home = memo(() => {
       },
     },
   };
-  console.log(auth);
+  
   const handleClick = () => {
     setAddingProject(!isAddingProject);
   };
@@ -114,7 +114,12 @@ const Home = memo(() => {
     await addProject({
       title: pTitle,
       description: pDesc,
-      employees: selectedEmployees,
+      employees: selectedEmployees.map((id) => {
+        return {
+          userId: id,
+          fullName: myDevelopers.find((no) => no._id === id).fullName,
+        };
+      }),
     });
 
     setPDesc("");
@@ -135,7 +140,7 @@ const Home = memo(() => {
         pwd: devPassword,
         userId: auth.auth.userId,
       });
-      console.log(response)
+      console.log(response);
       if (response.error.originalStatus === 409) {
         setError("Username already exists.");
         return;
@@ -239,13 +244,19 @@ const Home = memo(() => {
               value={personName}
               onChange={handleChange}
               input={<OutlinedInput label="Employees" />}
-              renderValue={(selected) => selected.join(", ")}
+              renderValue={(selected) =>
+                selected
+                  .map(
+                    (obj) => myDevelopers.find((no) => no._id === obj).fullName
+                  )
+                  .join(", ")
+              }
               MenuProps={MenuProps}
               disabled={myDevelopers?.length === 0}
             >
               {myDevelopers?.map((obj) => (
-                <MenuItem key={obj.fullName} value={obj.fullName}>
-                  <Checkbox checked={personName.indexOf(obj.fullName) > -1} />
+                <MenuItem key={obj.fullName} value={obj._id}>
+                  <Checkbox checked={personName.indexOf(obj._id) > -1} />
                   <ListItemText primary={obj.fullName} />
                 </MenuItem>
               ))}

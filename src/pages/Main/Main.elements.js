@@ -121,7 +121,7 @@ export const TableContainer = styled.div`
       padding: 8px 4px;
       & > td,
       th {
-        
+        text-align: center;
         padding: 0.5em;
         margin: auto;
         border: 1px solid lightgrey;

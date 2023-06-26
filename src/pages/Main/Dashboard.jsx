@@ -19,7 +19,7 @@ import ListItemText from "@mui/material/ListItemText";
 import Collapse from "@mui/material/Collapse";
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import {
   DashboardRounded,
   DocumentScanner,
@@ -38,6 +38,7 @@ import { setProjectData } from "../../reduxSlices/projectsSlice";
 
 function Dashboard() {
   const { id } = useParams();
+  const location = useLocation();
   const dispatch = useDispatch();
 
   const {
@@ -80,7 +81,11 @@ function Dashboard() {
         <BackNavigator
           columns="auto auto"
           justify="flex-start"
-          onClick={() => navigate("/home")}
+          onClick={() =>
+            location.pathname.split("/").includes("dev")
+              ? navigate("/dev")
+              : navigate("/home")
+          }
         >
           <KeyboardArrowLeft></KeyboardArrowLeft>
           <LightText>Back to Projects</LightText>

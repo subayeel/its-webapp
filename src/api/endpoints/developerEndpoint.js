@@ -2,6 +2,10 @@ import { apiSlice } from "../apiSlice";
 
 const developerEndpoint = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
+    getAssignedProjects: builder.query({
+      query: () => `/developer/myprojects`,
+      providesTags: ["DevProjects"],
+    }),
     addDeveloper: builder.mutation({
       query: (data) => ({
         url: `/register/developer/`,
@@ -21,4 +25,5 @@ const developerEndpoint = apiSlice.injectEndpoints({
 });
 
 export const { useAddDeveloperMutation } = developerEndpoint;
+export const { useGetAssignedProjectsQuery } = developerEndpoint;
 export const { useDeleteDeveloperMutation } = developerEndpoint;

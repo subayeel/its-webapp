@@ -172,7 +172,7 @@ function Navbar() {
   const production = "https://its-backend.onrender.com";
   async function handleLogout() {
     axios
-      .get(localApi + "/logout")
+      .get(production + "/logout")
       .then((res) => {
         console.log(res.data);
       })

@@ -8,10 +8,11 @@ import Home from "./pages/Main/Home";
 import RequireAuth from "./pages/Auth/RequireAuth";
 import Unauthorized from "./pages/Auth/Unauthorized";
 import AuthLayout from "./pages/Auth/AuthLayout";
+import DevDashboard from "./pages/Dev/DevDashboard";
 
 const ROLES = {
-  Candidate: 2001,
-  Manager: 5150,
+  Developer: 2023,
+  Manager: 2000,
 };
 function App() {
   return (
@@ -25,11 +26,17 @@ function App() {
               <Route element={<Register />} path="/register"></Route>
             </Route>
             <Route element={<Unauthorized />} path="/unauthorized"></Route>
-            <Route element={<RequireAuth allowedRoles={ROLES.Candidate} />}>
+            <Route element={<RequireAuth allowedRoles={[ROLES.Manager]} />}>
               <Route element={<Navbar />}>
                 <Route element={<Dashboard />} path="/project/:id"></Route>
                 <Route element={<Home />} path="/home"></Route>
                 <Route element={<Home />} path="/its-webapp"></Route>
+              </Route>
+            </Route>
+            <Route element={<RequireAuth allowedRoles={[ROLES.Developer]} />}>
+              <Route element={<Navbar />}>
+                <Route element={<DevDashboard />} path="/dev"></Route>
+                <Route element={<Dashboard />} path="/dev/project/:id"></Route>
               </Route>
             </Route>
           </Route>

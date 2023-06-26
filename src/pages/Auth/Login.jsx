@@ -22,8 +22,8 @@ import logo from "../../assets/atom.png";
 
 import axios from "axios";
 import { LoginContainer, AuthNav } from "./Auth.elements";
-const LOGIN_URL = "http://localhost:5000/auth";
-// const LOGIN_URL = "https://its-backend.onrender.com/auth";
+// const LOGIN_URL = "http://localhost:5000/auth";
+const LOGIN_URL = "https://its-backend.onrender.com/auth";
 function Login() {
   const navigate = useNavigate();
   const location = useLocation();
@@ -49,10 +49,14 @@ function Login() {
       const accessToken = response?.data?.accessToken;
       const userId = response?.data?.userId;
 
-      const roles = response?.data?.roles;
-
+      const roles = Object.values(response?.data?.roles);
+        console.log(response);
       if (response.status === 200) {
-        navigate("/home");
+        if (response?.data.roles?.includes(2000)) {
+          navigate("/home");
+        } else {
+          navigate("/dev");
+        }
       }
       setAuth({ user, pwd, roles, accessToken, userId });
       dispatch(setCredentials({ ...response.data }));
