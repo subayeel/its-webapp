@@ -128,12 +128,21 @@ const Home = memo(() => {
       setError("Password do not match");
       return;
     }
-    await addDeveloper({
-      fullName: devName,
-      user: devUsername,
-      pwd: devPassword,
-      userId: auth.auth.userId,
-    });
+    try {
+      const response = await addDeveloper({
+        fullName: devName,
+        user: devUsername,
+        pwd: devPassword,
+        userId: auth.auth.userId,
+      });
+      console.log(response)
+      if (response.error.originalStatus === 409) {
+        setError("Username already exists.");
+        return;
+      }
+    } catch (err) {
+      console.log(err);
+    }
 
     setError("");
     setDevCPassword("");

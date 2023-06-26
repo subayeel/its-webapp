@@ -3,7 +3,7 @@ import { apiSlice } from "../apiSlice";
 const projectEndPoints = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getProjects: builder.query({
-      query: () => "/project",
+      query: (data) => "/project",
       providesTags: ["Projects"],
     }),
     getSingleProject: builder.query({

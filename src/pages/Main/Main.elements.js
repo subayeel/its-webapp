@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { GridContainer, Container, CenterFlexContainer } from "../../Global";
+import { Delete } from "@mui/icons-material";
 
 export const MenuBar = styled(GridContainer)`
   box-sizing: border-box;
@@ -132,3 +133,11 @@ export const TableContainer = styled.div`
     }
   }
 `;
+
+export const DeleteIcon = styled(Delete)`
+color: #880808;
+&:hover{
+  cursor: pointer;
+  color: #EE4B2B;
+}
+`

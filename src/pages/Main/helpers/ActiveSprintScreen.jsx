@@ -22,7 +22,8 @@ import {
 import { HLine } from "../../../Global";
 
 import { Heading2 } from "../../../Global";
-import { Close, Delete } from "@mui/icons-material";
+import { Close } from "@mui/icons-material";
+import { DeleteIcon } from "../Main.elements";
 import {
   FormControl,
   InputLabel,
@@ -43,6 +44,7 @@ import {
 } from "../../../api/endpoints/projectEndpoint";
 import ReactModal from "react-modal";
 import { customStyle } from "../../../utils/modalStyles";
+import { useGetDeveloperQuery } from "../../../api/endpoints/managerEndpoint";
 function ActiveSprintScreen() {
   const { id } = useParams();
 
@@ -60,18 +62,12 @@ function ActiveSprintScreen() {
     useUpdateProjectTicketStatusMutation();
   const [removeTicket, { isLoading: isRemoveTicketLoading }] =
     useRemoveProjectTicketMutation();
+  const {
+    data: myDevelopers,
+    isLoading: isDevelopersLoading,
+    isSuccess: isDevelopersSuccess,
+  } = useGetDeveloperQuery();
 
-  const handleChange = (event) => {
-    const {
-      target: { value },
-    } = event;
-    setPersonName(
-      // On autofill we get a stringified value.
-      typeof value === "string" ? value.split(",") : value
-    );
-
-    dispatch({ type: ACTION.assignee, payload: value });
-  };
   const ACTION = {
     projectId: "handleProjectId",
     issueType: "handleIssue",
@@ -377,8 +373,8 @@ function ActiveSprintScreen() {
                 dispatch({ type: ACTION.reporter, payload: e.target.value });
               }}
             >
-              {employees.map((dp) => {
-                return <MenuItem value={dp}>{dp}</MenuItem>;
+              {myDevelopers?.map((obj) => {
+                return <MenuItem value={obj.fullName}>{obj.fullName}</MenuItem>;
               })}
             </Select>
           </FormControl>
@@ -394,8 +390,8 @@ function ActiveSprintScreen() {
                 dispatch({ type: ACTION.assignee, payload: e.target.value });
               }}
             >
-              {employees.map((dp) => {
-                return <MenuItem value={dp}>{dp}</MenuItem>;
+              {myDevelopers?.map((obj) => {
+                return <MenuItem value={obj.fullName}>{obj.fullName}</MenuItem>;
               })}
             </Select>
           </FormControl>
@@ -497,8 +493,8 @@ function ActiveSprintScreen() {
                                 }}
                               >
                                 <GridContainer columns="1fr auto" width="100%">
-                                  <JobSubTitle>{item.title}</JobSubTitle>
-                                  <Delete
+                                  <JobSubTitle style={{margin:"0"}}>{item.title}</JobSubTitle>
+                                  <DeleteIcon
                                     onClick={() => handleDeleteTicket(item._id)}
                                   />
                                 </GridContainer>
@@ -523,7 +519,7 @@ function ActiveSprintScreen() {
                                   </Container>
 
                                   <Button onClick={() => openModal(item._id)}>
-                                    View
+                                    Update
                                   </Button>
                                 </CenterFlexContainer>
                               </KanbanCard>

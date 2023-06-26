@@ -2,9 +2,10 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { logOut, setCredentials } from "./auth/authSlice";
 
 const baseQuery = fetchBaseQuery({
-  baseUrl: "https://its-backend.onrender.com",
-  // baseUrl: "http://localhost:5000/",
+  // baseUrl: "https://its-backend.onrender.com",
+  baseUrl: "http://localhost:5000/",
   credentials: "include",
+  
   prepareHeaders: (headers, { getState }) => {
     const token = getState().auth.accessToken;
 
@@ -42,6 +43,7 @@ const baseQueryWithReAuth = async (args, api, extraOptions) => {
 
 export const apiSlice = createApi({
   reducerPath: "userApi",
+  keepUnusedDataFor:60,
   baseQuery: baseQueryWithReAuth,
   endpoints: (builder) => ({}),
 });
