@@ -362,13 +362,13 @@ const Home = memo(() => {
                           <td>{obj.ticketsAssigned.length}</td>
                           <td>
                             <CenterFlexContainer>
-                              {/* <Button
-                                onClick={() =>
-                                  navigate(`/developer/${obj._id}`)
-                                }
-                              >
-                                View
-                              </Button> */}
+                                {/* <Button
+                                  onClick={() =>
+                                    navigate(`/developer/${obj._id}`)
+                                  }
+                                >
+                                  View
+                                </Button> */}
                               <Button
                                 style={{
                                   background: "#D85959",
