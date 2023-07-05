@@ -71,9 +71,6 @@ function Navbar() {
 
   const [isAddingModal, setAddingModal] = useState(false);
 
-  
-  
-
   function reducer(state, action) {
     switch (action.type) {
       case ACTION.projectId:
@@ -122,7 +119,7 @@ function Navbar() {
   function closeModal() {
     setAddingModal(false);
   }
- 
+
   const dummyIssues = [
     { id: 1, type: "Task" },
     { id: 2, type: "Story" },
@@ -149,8 +146,6 @@ function Navbar() {
     { id: 4, type: "Sprint 4" },
   ];
 
-  
-
   async function handleSubmit() {
     const response = await addTicket({
       ...issueData,
@@ -158,11 +153,11 @@ function Navbar() {
     });
     dispatchRedux(
       setProjectData({
-        title: response?.data.title,
-        description: response?.data.description,
-        projectId: response?.data.projectId,
-        tickets: response?.data.tickets,
-        employees: response?.data.employees,
+        title: response?.data?.title,
+        description: response?.data?.description,
+        projectId: response?.data?.projectId,
+        tickets: response?.data?.tickets,
+        employees: response?.data?.employees,
       })
     );
     dispatch({ type: ACTION.reset });
