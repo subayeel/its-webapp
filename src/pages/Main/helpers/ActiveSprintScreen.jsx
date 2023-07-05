@@ -49,6 +49,7 @@ function ActiveSprintScreen() {
   const { id } = useParams();
 
   const data = useSelector((state) => state.project);
+  console.log(data);
   // const [newData, setNewData] = useState(data);
 
   const [selectedId, setSelectedId] = useState();
@@ -373,7 +374,7 @@ function ActiveSprintScreen() {
                 dispatch({ type: ACTION.reporter, payload: e.target.value });
               }}
             >
-              {myDevelopers?.map((obj) => {
+              {data?.employees?.map((obj) => {
                 return <MenuItem value={obj.fullName}>{obj.fullName}</MenuItem>;
               })}
             </Select>
@@ -390,7 +391,7 @@ function ActiveSprintScreen() {
                 dispatch({ type: ACTION.assignee, payload: e.target.value });
               }}
             >
-              {myDevelopers?.map((obj) => {
+              {data?.employees?.map((obj) => {
                 return <MenuItem value={obj.fullName}>{obj.fullName}</MenuItem>;
               })}
             </Select>
@@ -493,7 +494,9 @@ function ActiveSprintScreen() {
                                 }}
                               >
                                 <GridContainer columns="1fr auto" width="100%">
-                                  <JobSubTitle style={{margin:"0"}}>{item.title}</JobSubTitle>
+                                  <JobSubTitle style={{ margin: "0" }}>
+                                    {item.title}
+                                  </JobSubTitle>
                                   <DeleteIcon
                                     onClick={() => handleDeleteTicket(item._id)}
                                   />
