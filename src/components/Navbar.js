@@ -134,6 +134,7 @@ function Navbar() {
     { key: "DevelopmentCompleted", status: "Development Completed" },
     { key: "InProgress", status: "In Progress" },
     { key: "InQA", status: "In QA" },
+    { key: "Done", status: "Done" },
   ];
   const dummyPriority = [
     { id: 1, type: "Highest" },
@@ -276,7 +277,7 @@ function Navbar() {
                   dispatch({ type: ACTION.reporter, payload: e.target.value });
                 }}
               >
-                {myDevelopers?.map((dp) => {
+                {data.employees?.map((dp) => {
                   return <MenuItem value={dp.fullName}>{dp.fullName}</MenuItem>;
                 })}
               </Select>
@@ -294,7 +295,7 @@ function Navbar() {
                 }}
                 label="Assignee *"
               >
-                {myDevelopers?.map((dp) => {
+                {data.employees?.map((dp) => {
                   return <MenuItem value={dp.fullName}>{dp.fullName}</MenuItem>;
                 })}
               </Select>

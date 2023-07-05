@@ -45,11 +45,11 @@ import {
 import ReactModal from "react-modal";
 import { customStyle } from "../../../utils/modalStyles";
 import { useGetDeveloperQuery } from "../../../api/endpoints/managerEndpoint";
-function ActiveSprintScreen() {
+function ActiveSprintScreen({ employees }) {
   const { id } = useParams();
 
   const data = useSelector((state) => state.project);
-  console.log(data);
+  console.log(data.employees);
   // const [newData, setNewData] = useState(data);
 
   const [selectedId, setSelectedId] = useState();
@@ -145,10 +145,6 @@ function ActiveSprintScreen() {
       name: "Done",
       items: data.tickets?.filter((c) => c.status === "Done"),
     },
-    Apple: {
-      name: "Done",
-      items: data.tickets?.filter((c) => c.status === "Done"),
-    },
   };
 
   const [columns, setColumns] = useState(columnsFromBackend);
@@ -164,6 +160,7 @@ function ActiveSprintScreen() {
     { key: "DevelopmentCompleted", status: "Development Completed" },
     { key: "InProgress", status: "In Progress" },
     { key: "InQA", status: "In QA" },
+    { key: "Done", status: "Done" },
   ];
   const dummyPriority = [
     { id: 1, type: "Highest" },
@@ -177,18 +174,7 @@ function ActiveSprintScreen() {
     { id: 3, type: "Sprint 3" },
     { id: 4, type: "Sprint 4" },
   ];
-  const employees = [
-    "Oliver Hansen",
-    "Van Henry",
-    "April Tucker",
-    "Ralph Hubbard",
-    "Omar Alexander",
-    "Carlos Abbott",
-    "Miriam Wagner",
-    "Bradley Wilkerson",
-    "Virginia Andrews",
-    "Kelly Snyder",
-  ];
+
   const ITEM_HEIGHT = 48;
   const ITEM_PADDING_TOP = 8;
   const MenuProps = {
@@ -374,7 +360,7 @@ function ActiveSprintScreen() {
                 dispatch({ type: ACTION.reporter, payload: e.target.value });
               }}
             >
-              {data?.employees?.map((obj) => {
+              {data.employees?.map((obj) => {
                 return <MenuItem value={obj.fullName}>{obj.fullName}</MenuItem>;
               })}
             </Select>
@@ -391,7 +377,7 @@ function ActiveSprintScreen() {
                 dispatch({ type: ACTION.assignee, payload: e.target.value });
               }}
             >
-              {data?.employees?.map((obj) => {
+              {data.employees?.map((obj) => {
                 return <MenuItem value={obj.fullName}>{obj.fullName}</MenuItem>;
               })}
             </Select>
