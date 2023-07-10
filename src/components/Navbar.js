@@ -41,6 +41,7 @@ import { useAddProjectTicketMutation } from "../api/endpoints/projectEndpoint";
 import { useDispatch } from "react-redux";
 import { setProjectData } from "../reduxSlices/projectsSlice";
 import { useGetDeveloperQuery } from "../api/endpoints/managerEndpoint";
+import { BASE_URL } from "../utils/constants";
 
 const ACTION = {
   projectId: "handleProjectId",
@@ -164,11 +165,9 @@ function Navbar() {
     setAddingModal(false);
   }
 
-  const localApi = "http://localhost:5000";
-  const production = "https://its-backend.onrender.com";
   async function handleLogout() {
     axios
-      .get(production + "/logout")
+      .get(BASE_URL + "/logout")
       .then((res) => {
         console.log(res.data);
       })

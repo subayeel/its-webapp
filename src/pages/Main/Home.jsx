@@ -1,4 +1,4 @@
-import React, { useState, memo } from "react";
+import React, { useState, memo, useReducer } from "react";
 import ReactModal from "react-modal";
 import {
   AddIcon,
@@ -13,11 +13,6 @@ import {
   MainContainer,
 } from "../../Global";
 import { TableContainer } from "./Main.elements";
-import {
-  useAddProjectMutation,
-  useGetProjectsQuery,
-  useDeleteProjectMutation,
-} from "../../api/endpoints/projectEndpoint";
 
 import { useNavigate } from "react-router-dom";
 import {
@@ -33,12 +28,19 @@ import {
 } from "@mui/material";
 import { projectModalStyle } from "../../utils/modalStyles";
 import {
+  useAddProjectMutation,
+  useGetProjectsQuery,
+  useDeleteProjectMutation,
+} from "../../api/endpoints/projectEndpoint";
+import {
   useAddDeveloperMutation,
   useDeleteDeveloperMutation,
+  useUpdateDeveloperMutation,
 } from "../../api/endpoints/developerEndpoint";
 import useAuth from "../../hooks/useAuth";
 import { useGetDeveloperQuery } from "../../api/endpoints/managerEndpoint";
 import NoData from "../../components/NoData";
+import { current } from "@reduxjs/toolkit";
 
 const Home = memo(() => {
   const navigate = useNavigate();
@@ -57,6 +59,15 @@ const Home = memo(() => {
   const [devPassword, setDevPassword] = useState("");
   const [devCPassword, setDevCPassword] = useState("");
 
+  //Update Dev
+  const [devUpdateModal, setDevUpdateModal] = useState(false);
+  const [currentDev, setCurrentDev] = useState("");
+  const [uFullName, setUFullName] = useState("");
+  const [uProjects, setUProjects] = useState([]);
+
+  const [selectedProjects, setSelectedProjects] = useState([]);
+  //Update EMployee
+
   const [error, setError] = useState("");
 
   //RTK Query
@@ -68,6 +79,8 @@ const Home = memo(() => {
     useAddDeveloperMutation();
   const [deleteDeveloper, { isLoading: isDeleteDeveloperLoading }] =
     useDeleteDeveloperMutation();
+  const [updateDeveloper, { isLoading: isUpdateDeveloperLoading }] =
+    useUpdateDeveloperMutation();
 
   const {
     data: projects,
@@ -90,7 +103,7 @@ const Home = memo(() => {
       },
     },
   };
-  
+
   const handleClick = () => {
     setAddingProject(!isAddingProject);
   };
@@ -108,6 +121,17 @@ const Home = memo(() => {
     );
 
     setSelectedEmployees(value);
+  };
+  const handleProjectAssigning = (event) => {
+    const {
+      target: { value },
+    } = event;
+    setSelectedProjects(
+      // On autofill we get a stringified value.
+      typeof value === "string" ? value.split(",") : value
+    );
+
+    setUProjects(value);
   };
 
   async function handleAddProject() {
@@ -160,6 +184,10 @@ const Home = memo(() => {
     setAddingProject(false);
     setAddingDeveloper(true);
   }
+  function handleEmptyProjects() {
+    setDevUpdateModal(false);
+    setAddingProject(true);
+  }
   //TODO :create delete endpoint
   async function handleDeleteDeveloper(did) {
     try {
@@ -178,47 +206,84 @@ const Home = memo(() => {
   }
 
   //TODO: Update existing employee
-  async function handleUpdateDeveloper() {}
+  async function handleDevEdit(id) {
+    setCurrentDev(myDevelopers.find((obj) => obj._id == id));
+
+    const cd = myDevelopers.find((obj) => obj._id == id);
+
+    console.log("cd", cd);
+    setUFullName(cd.fullName);
+    setUProjects(cd.projectsAssigned.map((p) => p._id));
+    setDevUpdateModal(true);
+  }
+
+  const handleUpdateDeveloper = async () => {
+    await updateDeveloper({
+      id: currentDev._id,
+      fullName: uFullName,
+      projects: projects.filter((proj) => uProjects.includes(proj._id)),
+    });
+  };
   return (
     <MainContainer>
-      {/* Add Developer Name */}
+      {/* Update Developer */}
       <ReactModal
-        onRequestClose={() => setAddingDeveloper(false)}
-        isOpen={isAddingDeveloper}
+        isOpen={devUpdateModal}
+        onRequestClose={() => setDevUpdateModal(false)}
         style={projectModalStyle}
       >
-        <Heading>Add Developer</Heading>
+        <Heading>Update {uFullName} Details</Heading>
         <GridContainer columns="1fr">
           <TextField
             label="Full Name"
-            value={devName}
-            onChange={(e) => setDevName(e.target.value)}
+            value={uFullName}
+            onChange={(e) => setUFullName(e.target.value)}
           ></TextField>
-          <TextField
-            label="Username"
-            value={devUsername}
-            onChange={(e) => setDevUsername(e.target.value)}
-          ></TextField>
-          <TextField
-            type="password"
-            label="Password"
-            value={devPassword}
-            onChange={(e) => setDevPassword(e.target.value)}
-          ></TextField>
-          <TextField
-            type="password"
-            label="Confirm Password"
-            value={devCPassword}
-            onChange={(e) => setDevCPassword(e.target.value)}
-          ></TextField>
+          <FormControl sx={{ width: 300 }}>
+            <InputLabel id="demo-multiple-checkbox-label">
+              Assign Project
+            </InputLabel>
+            <Select
+              labelId="demo-multiple-checkbox-label"
+              multiple
+              value={uProjects}
+              onChange={handleProjectAssigning}
+              input={<OutlinedInput label="Assign Project" />}
+              renderValue={(selected) =>
+                selected
+                  .map((obj) => projects.find((no) => no._id === obj).title)
+                  .join(", ")
+              }
+              MenuProps={MenuProps}
+              disabled={projects?.length === 0}
+            >
+              {projects?.map((obj) => (
+                <MenuItem key={obj.title} value={obj._id}>
+                  <Checkbox checked={uProjects.indexOf(obj._id) > -1} />
+                  <ListItemText primary={obj.title} />
+                </MenuItem>
+              ))}
+            </Select>
+            {projects?.length === 0 && (
+              <>
+                <LightText>
+                  Please add Projects and assign them to your developers.&nbsp;
+                  <LinkText onClick={handleEmptyProjects}>
+                    Add Projects
+                  </LinkText>
+                </LightText>
+              </>
+            )}
+          </FormControl>
+
           {error && <ErrorContainer>{error}</ErrorContainer>}
-          <Button variant="contained" onClick={handleAddDeveloper}>
-            Add Developer
+          <Button variant="contained" onClick={handleUpdateDeveloper}>
+            Update
           </Button>
         </GridContainer>
       </ReactModal>
 
-      {/* Add Project Name */}
+      {/* Add Project  */}
       <ReactModal
         onRequestClose={() => setAddingProject(false)}
         isOpen={isAddingProject}
@@ -272,6 +337,43 @@ const Home = memo(() => {
           </FormControl>
           <Button variant="contained" onClick={handleAddProject}>
             Add Project
+          </Button>
+        </GridContainer>
+      </ReactModal>
+
+      {/* Add Developer Details */}
+      <ReactModal
+        onRequestClose={() => setAddingDeveloper(false)}
+        isOpen={isAddingDeveloper}
+        style={projectModalStyle}
+      >
+        <Heading>Add Developer</Heading>
+        <GridContainer columns="1fr">
+          <TextField
+            label="Full Name"
+            value={devName}
+            onChange={(e) => setDevName(e.target.value)}
+          ></TextField>
+          <TextField
+            label="Username"
+            value={devUsername}
+            onChange={(e) => setDevUsername(e.target.value)}
+          ></TextField>
+          <TextField
+            type="password"
+            label="Password"
+            value={devPassword}
+            onChange={(e) => setDevPassword(e.target.value)}
+          ></TextField>
+          <TextField
+            type="password"
+            label="Confirm Password"
+            value={devCPassword}
+            onChange={(e) => setDevCPassword(e.target.value)}
+          ></TextField>
+          {error && <ErrorContainer>{error}</ErrorContainer>}
+          <Button variant="contained" onClick={handleAddDeveloper}>
+            Add Developer
           </Button>
         </GridContainer>
       </ReactModal>
@@ -361,14 +463,16 @@ const Home = memo(() => {
                           <td>{obj.projectsAssigned.length}</td>
                           <td>{obj.ticketsAssigned.length}</td>
                           <td>
-                            <CenterFlexContainer>
-                                {/* <Button
-                                  onClick={() =>
-                                    navigate(`/developer/${obj._id}`)
-                                  }
-                                >
-                                  View
-                                </Button> */}
+                            <CenterFlexContainer style={{gap:"8px"}}>
+                              <Button
+                                style={{
+                                  background: "#90c1d7",
+                                  color: "white",
+                                }}
+                                onClick={() => handleDevEdit(obj?._id)}
+                              >
+                                Edit
+                              </Button>
                               <Button
                                 style={{
                                   background: "#D85959",

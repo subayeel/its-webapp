@@ -14,6 +14,14 @@ const developerEndpoint = apiSlice.injectEndpoints({
       }),
       invalidatesTags: ["Developer"],
     }),
+    updateDeveloper: builder.mutation({
+      query: (data) => ({
+        url: `/developer/${data.id}`,
+        method: "PUT",
+        body: data,
+      }),
+      invalidatesTags: ["Developer"],
+    }),
     deleteDeveloper: builder.mutation({
       query: (data) => ({
         url: `/developer/${data.id}`,
@@ -25,5 +33,6 @@ const developerEndpoint = apiSlice.injectEndpoints({
 });
 
 export const { useAddDeveloperMutation } = developerEndpoint;
+export const { useUpdateDeveloperMutation } = developerEndpoint;
 export const { useGetAssignedProjectsQuery } = developerEndpoint;
 export const { useDeleteDeveloperMutation } = developerEndpoint;

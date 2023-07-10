@@ -1,9 +1,9 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { logOut, setCredentials } from "./auth/authSlice";
+import { BASE_URL } from "../utils/constants";
 
 const baseQuery = fetchBaseQuery({
-  baseUrl: "https://its-backend.onrender.com",
-  // baseUrl: "http://localhost:5000/",
+  baseUrl: BASE_URL,
   credentials: "include",
 
   prepareHeaders: (headers, { getState }) => {
