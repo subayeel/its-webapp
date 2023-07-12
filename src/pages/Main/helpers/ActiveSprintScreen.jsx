@@ -2,7 +2,12 @@ import React, { useEffect, useState, useReducer } from "react";
 import { DragDropContext, Draggable } from "react-beautiful-dnd";
 import { StrictModeDroppable as Droppable } from "../../../utils/StrictModeDroppable";
 import { useDispatch } from "react-redux";
-import { KanbanCard, KanbanContainer, KanbanColumn } from "../Main.elements";
+import {
+  KanbanCard,
+  KanbanContainer,
+  KanbanColumn,
+  ProfileAvatar,
+} from "../Main.elements";
 import {
   Container,
   CenterFlexContainer,
@@ -49,7 +54,7 @@ function ActiveSprintScreen({ employees }) {
   const { id } = useParams();
 
   const data = useSelector((state) => state.project);
-  console.log(data.employees);
+
   // const [newData, setNewData] = useState(data);
 
   const [selectedId, setSelectedId] = useState();
@@ -154,6 +159,12 @@ function ActiveSprintScreen({ employees }) {
     { id: 2, type: "Story" },
     { id: 3, type: "Bug" },
     { id: 4, type: "Epic" },
+  ];
+  const dummyEpic = [
+    { id: 1, type: "Threejs Animation Update" },
+    { id: 2, type: "Revert Textfield changes" },
+    { id: 3, type: "Authentication" },
+    { id: 4, type: "Bugs" },
   ];
   const dummyStatus = [
     { key: "TODO", status: "TO DO" },
@@ -266,267 +277,357 @@ function ActiveSprintScreen({ employees }) {
     });
   }
 
+  const [selectedDev, setSelectedDevList] = useState([]);
+  const [devFilter, setDevFilter] = useState("");
+  const [selectedEpic, setSelectedEpic] = useState("");
+  console.log(selectedDev);
   return (
-    <KanbanContainer>
-      <ReactModal
-        style={customStyle}
-        isOpen={isAddingModal}
-        onRequestClose={() => setAddingModal(false)}
-      >
+    <GridContainer align="flex-start">
+      <GridContainer width="100%" columns="auto 1fr 1fr">
+        <TextField
+          sx={{ width: "100px" }}
+          value={devFilter}
+          onChange={setDevFilter}
+          label="Search"
+        ></TextField>
         <GridContainer
-          style={{ borderBottom: "2px solid #ddd" }}
-          padding="1rem"
-          justify="space-between"
-          columns="auto auto"
+          width="100%"
+          columns="repeat(auto-fill,minmax(20px,1fr))"
         >
-          <Heading2>Update Issue</Heading2>
-          <Close onClick={() => setAddingModal(false)} />
+          {data.employees?.map((obj, i) => (
+            <ProfileToggle
+              setSelectedDevList={setSelectedDevList}
+              selectedDev={selectedDev}
+              isSelected={selectedDev.includes(obj.userId)}
+              key={i}
+              user={obj}
+            ></ProfileToggle>
+          ))}
         </GridContainer>
+        <FormControl fullWidth>
+          <InputLabel id="epic-label">Epic</InputLabel>
+          <Select
+            fullWidth
+            sx={{ width: "280px" }}
+            labelId="epic-label"
+            value={issueData.issueType}
+            label="Epic"
+            onChange={(e) => {
+              setSelectedEpic(e.target.value);
+            }}
+          >
+            {dummyIssues.map((dp) => {
+              return <MenuItem value={dp.type}>{dp.type}</MenuItem>;
+            })}
+          </Select>
+        </FormControl>
+      </GridContainer>
 
-        <GridContainer
-          style={{ overflowY: "scroll", height: "300px" }}
-          justify="flex-start"
-          place="flex-start"
-          columns="1fr"
-          padding="1rem"
+      <KanbanContainer>
+        <ReactModal
+          style={customStyle}
+          isOpen={isAddingModal}
+          onRequestClose={() => setAddingModal(false)}
         >
-          <LightText>
-            Project Name: <Heading2>{data.title}</Heading2>
-          </LightText>
-
-          <TextField
-            label="Issue Title"
-            value={issueData.title}
-            onChange={(e) => {
-              dispatch({ type: ACTION.title, payload: e.target.value });
-            }}
-          ></TextField>
-          <FormControl fullWidth>
-            <InputLabel id="issue-label">Issue Type *</InputLabel>
-            <Select
-              fullWidth
-              sx={{ width: "280px" }}
-              labelId="issue-label"
-              value={issueData.issueType}
-              label="Issue Type *"
-              onChange={(e) => {
-                dispatch({ type: ACTION.issueType, payload: e.target.value });
-              }}
-            >
-              {dummyIssues.map((dp) => {
-                return <MenuItem value={dp.type}>{dp.type}</MenuItem>;
-              })}
-            </Select>
-          </FormControl>
-          <HLine />
-
-          <FormControl fullWidth>
-            <InputLabel id="status-label">Status</InputLabel>
-            <Select
-              fullWidth
-              sx={{ width: "280px" }}
-              labelId="status-label"
-              value={issueData.status}
-              label="Status *"
-              onChange={(e) => {
-                dispatch({ type: ACTION.status, payload: e.target.value });
-              }}
-            >
-              {dummyStatus.map((dp) => {
-                return <MenuItem value={dp.key}>{dp.status}</MenuItem>;
-              })}
-            </Select>
-          </FormControl>
-
-          <TextField
-            label="Description"
-            value={issueData.description}
-            onChange={(e) => {
-              dispatch({ type: ACTION.description, payload: e.target.value });
-            }}
-          ></TextField>
-
-          <HLine />
-
-          <FormControl fullWidth>
-            <InputLabel id="status-label">Reporter</InputLabel>
-            <Select
-              fullWidth
-              sx={{ width: "280px" }}
-              labelId="status-label"
-              value={issueData.reporter}
-              label="Reporter *"
-              onChange={(e) => {
-                dispatch({ type: ACTION.reporter, payload: e.target.value });
-              }}
-            >
-              {data.employees?.map((obj) => {
-                return <MenuItem value={obj.fullName}>{obj.fullName}</MenuItem>;
-              })}
-            </Select>
-          </FormControl>
-          <FormControl fullWidth>
-            <InputLabel id="status-label">Assignee</InputLabel>
-            <Select
-              fullWidth
-              sx={{ width: "280px" }}
-              labelId="status-label"
-              value={issueData.assignee}
-              label="Reporter *"
-              onChange={(e) => {
-                dispatch({ type: ACTION.assignee, payload: e.target.value });
-              }}
-            >
-              {data.employees?.map((obj) => {
-                return <MenuItem value={obj.fullName}>{obj.fullName}</MenuItem>;
-              })}
-            </Select>
-          </FormControl>
-
-          <HLine />
-          <FormControl fullWidth>
-            <InputLabel id="status-label">Priority</InputLabel>
-            <Select
-              fullWidth
-              sx={{ width: "280px" }}
-              labelId="status-label"
-              value={issueData.priority}
-              label="Priority *"
-              onChange={(e) => {
-                dispatch({ type: ACTION.priority, payload: e.target.value });
-              }}
-            >
-              {dummyPriority.map((dp) => {
-                return <MenuItem value={dp.type}>{dp.type}</MenuItem>;
-              })}
-            </Select>
-          </FormControl>
-          <FormControl fullWidth>
-            <InputLabel id="status-label">Sprint</InputLabel>
-            <Select
-              fullWidth
-              sx={{ width: "280px" }}
-              labelId="status-label"
-              value={issueData.sprint}
-              label="Sprint"
-              onChange={(e) => {
-                dispatch({ type: ACTION.sprint, payload: e.target.value });
-              }}
-            >
-              {dummySprint.map((dp) => {
-                return <MenuItem value={dp.type}>{dp.type}</MenuItem>;
-              })}
-            </Select>
-          </FormControl>
-        </GridContainer>
-        <Absolute width="100%" bottom="0">
           <GridContainer
+            style={{ borderBottom: "2px solid #ddd" }}
+            padding="1rem"
             justify="space-between"
-            style={{ borderTop: "2px solid #ddd" }}
-            padding="0 0.7rem"
             columns="auto auto"
           >
-            <TextButton onClick={() => setAddingModal(false)}>
-              Cancel
-            </TextButton>
-            <Button variant="contained" onClick={handleUpdateSubmit}>
-              Update
-            </Button>
+            <Heading2>Update Issue</Heading2>
+            <Close onClick={() => setAddingModal(false)} />
           </GridContainer>
-        </Absolute>
-      </ReactModal>
-      <DragDropContext
-        onDragEnd={(result) => handleOnDragEnd(result, columns, setColumns)}
-      >
-        {Object.entries(columns).map(([id, column]) => {
-          return (
-            <Droppable droppableId={id}>
-              {(provided, snapshot) => {
-                return (
-                  <Container>
-                    <h3>{column.name}</h3>
-                    <KanbanColumn
-                      {...provided.droppableProps}
-                      ref={provided.innerRef}
-                      style={{
-                        background: snapshot.isDraggingOver
-                          ? "#EBFFC8 "
-                          : "#EFF2E9",
-                        marginRight: "1rem",
-                      }}
-                    >
-                      {column?.items?.map((item, index) => {
-                        return (
-                          <Draggable
-                            key={item._id}
-                            draggableId={item._id}
-                            index={index}
-                          >
-                            {(provided, snapshot) => (
-                              <KanbanCard
-                                {...provided.draggableProps}
-                                {...provided.dragHandleProps}
-                                ref={provided.innerRef}
-                                style={{
-                                  userSelect: "none",
-                                  display: "grid",
-                                  width: "calc(100% - 16px - 2rem)",
-                                  gridTemplateColumns: "1fr",
-                                  margin: "4px 8px",
-                                  backgroundColor: snapshot.isDragging
-                                    ? "#CBCBCB "
-                                    : "#fff",
-                                  ...provided.draggableProps.style,
-                                }}
-                              >
-                                <GridContainer columns="1fr auto" width="100%">
-                                  <JobSubTitle style={{ margin: "0" }}>
-                                    {item.title}
-                                  </JobSubTitle>
-                                  <DeleteIcon
-                                    onClick={() => handleDeleteTicket(item._id)}
-                                  />
-                                </GridContainer>
-                                <TileHeading>{item.description}</TileHeading>
-                                <JobSmallText>
-                                  Priority:&nbsp;{item.priority}
-                                </JobSmallText>
 
-                                <GridContainer
-                                  justify="flex-start"
-                                  gap="0"
-                                  columns="auto auto"
-                                >
-                                  <LightText>Reporter:&nbsp;</LightText>
-                                  <LightText>{item.reporter}</LightText>
-                                </GridContainer>
-                                <HLine />
-                                <CenterFlexContainer justify="space-between">
-                                  <Container align="flex-start">
-                                    <LightText>Assignee:&nbsp;</LightText>
-                                    <LightText>{item.assignee}</LightText>
-                                  </Container>
+          <GridContainer
+            style={{ overflowY: "scroll", height: "300px" }}
+            justify="flex-start"
+            place="flex-start"
+            columns="1fr"
+            padding="1rem"
+          >
+            <LightText>
+              Project Name: <Heading2>{data.title}</Heading2>
+            </LightText>
 
-                                  <Button onClick={() => openModal(item._id)}>
-                                    Update
-                                  </Button>
-                                </CenterFlexContainer>
-                              </KanbanCard>
-                            )}
-                          </Draggable>
-                        );
-                      })}
-                      {provided.placeholder}
-                    </KanbanColumn>
-                  </Container>
-                );
+            <TextField
+              label="Issue Title"
+              value={issueData.title}
+              onChange={(e) => {
+                dispatch({ type: ACTION.title, payload: e.target.value });
               }}
-            </Droppable>
-          );
-        })}
-      </DragDropContext>
-    </KanbanContainer>
+            ></TextField>
+            <FormControl fullWidth>
+              <InputLabel id="issue-label">Issue Type *</InputLabel>
+              <Select
+                fullWidth
+                sx={{ width: "280px" }}
+                labelId="issue-label"
+                value={issueData.issueType}
+                label="Issue Type *"
+                onChange={(e) => {
+                  dispatch({ type: ACTION.issueType, payload: e.target.value });
+                }}
+              >
+                {dummyIssues.map((dp) => {
+                  return <MenuItem value={dp.type}>{dp.type}</MenuItem>;
+                })}
+              </Select>
+            </FormControl>
+            <HLine />
+
+            <FormControl fullWidth>
+              <InputLabel id="status-label">Status</InputLabel>
+              <Select
+                fullWidth
+                sx={{ width: "280px" }}
+                labelId="status-label"
+                value={issueData.status}
+                label="Status *"
+                onChange={(e) => {
+                  dispatch({ type: ACTION.status, payload: e.target.value });
+                }}
+              >
+                {dummyStatus.map((dp) => {
+                  return <MenuItem value={dp.key}>{dp.status}</MenuItem>;
+                })}
+              </Select>
+            </FormControl>
+
+            <TextField
+              label="Description"
+              value={issueData.description}
+              onChange={(e) => {
+                dispatch({ type: ACTION.description, payload: e.target.value });
+              }}
+            ></TextField>
+
+            <HLine />
+
+            <FormControl fullWidth>
+              <InputLabel id="status-label">Reporter</InputLabel>
+              <Select
+                fullWidth
+                sx={{ width: "280px" }}
+                labelId="status-label"
+                value={issueData.reporter}
+                label="Reporter *"
+                onChange={(e) => {
+                  dispatch({ type: ACTION.reporter, payload: e.target.value });
+                }}
+              >
+                {data.employees?.map((obj) => {
+                  return (
+                    <MenuItem value={obj.fullName}>{obj.fullName}</MenuItem>
+                  );
+                })}
+              </Select>
+            </FormControl>
+            <FormControl fullWidth>
+              <InputLabel id="status-label">Assignee</InputLabel>
+              <Select
+                fullWidth
+                sx={{ width: "280px" }}
+                labelId="status-label"
+                value={issueData.assignee}
+                label="Reporter *"
+                onChange={(e) => {
+                  dispatch({ type: ACTION.assignee, payload: e.target.value });
+                }}
+              >
+                {data.employees?.map((obj) => {
+                  return (
+                    <MenuItem value={obj.fullName}>{obj.fullName}</MenuItem>
+                  );
+                })}
+              </Select>
+            </FormControl>
+
+            <HLine />
+            <FormControl fullWidth>
+              <InputLabel id="status-label">Priority</InputLabel>
+              <Select
+                fullWidth
+                sx={{ width: "280px" }}
+                labelId="status-label"
+                value={issueData.priority}
+                label="Priority *"
+                onChange={(e) => {
+                  dispatch({ type: ACTION.priority, payload: e.target.value });
+                }}
+              >
+                {dummyPriority.map((dp) => {
+                  return <MenuItem value={dp.type}>{dp.type}</MenuItem>;
+                })}
+              </Select>
+            </FormControl>
+            <FormControl fullWidth>
+              <InputLabel id="status-label">Sprint</InputLabel>
+              <Select
+                fullWidth
+                sx={{ width: "280px" }}
+                labelId="status-label"
+                value={issueData.sprint}
+                label="Sprint"
+                onChange={(e) => {
+                  dispatch({ type: ACTION.sprint, payload: e.target.value });
+                }}
+              >
+                {dummySprint.map((dp) => {
+                  return <MenuItem value={dp.type}>{dp.type}</MenuItem>;
+                })}
+              </Select>
+            </FormControl>
+          </GridContainer>
+          <Absolute width="100%" bottom="0">
+            <GridContainer
+              justify="space-between"
+              style={{ borderTop: "2px solid #ddd" }}
+              padding="0 0.7rem"
+              columns="auto auto"
+            >
+              <TextButton onClick={() => setAddingModal(false)}>
+                Cancel
+              </TextButton>
+              <Button variant="contained" onClick={handleUpdateSubmit}>
+                Update
+              </Button>
+            </GridContainer>
+          </Absolute>
+        </ReactModal>
+
+        <DragDropContext
+          onDragEnd={(result) => handleOnDragEnd(result, columns, setColumns)}
+        >
+          {Object.entries(columns).map(([id, column]) => {
+            return (
+              <Droppable droppableId={id}>
+                {(provided, snapshot) => {
+                  return (
+                    <Container>
+                      <Heading2>{column.name}</Heading2>
+                      <KanbanColumn
+                        {...provided.droppableProps}
+                        ref={provided.innerRef}
+                        style={{
+                          background: snapshot.isDraggingOver
+                            ? "#EBFFC8 "
+                            : "#EFF2E9",
+                          marginRight: "1rem",
+                        }}
+                      >
+                        {column?.items
+                          ?.filter((obj) => {
+                            if (selectedDev.length !== 0) {
+                              return selectedDev.includes(obj.assignee);
+                            } else {
+                              return true;
+                            }
+                          })
+                          .map((item, index) => {
+                            return (
+                              <Draggable
+                                key={item._id}
+                                draggableId={item._id}
+                                index={index}
+                              >
+                                {(provided, snapshot) => (
+                                  <KanbanCard
+                                    {...provided.draggableProps}
+                                    {...provided.dragHandleProps}
+                                    ref={provided.innerRef}
+                                    style={{
+                                      userSelect: "none",
+                                      display: "grid",
+                                      width: "calc(100% - 16px - 2rem)",
+                                      gridTemplateColumns: "1fr",
+                                      margin: "4px 8px",
+                                      backgroundColor: snapshot.isDragging
+                                        ? "#CBCBCB "
+                                        : "#fff",
+                                      ...provided.draggableProps.style,
+                                    }}
+                                  >
+                                    <GridContainer
+                                      columns="1fr auto"
+                                      width="100%"
+                                    >
+                                      <JobSubTitle style={{ margin: "0" }}>
+                                        {item.title}
+                                      </JobSubTitle>
+                                      <DeleteIcon
+                                        onClick={() =>
+                                          handleDeleteTicket(item._id)
+                                        }
+                                      />
+                                    </GridContainer>
+                                    <TileHeading>
+                                      {item.description}
+                                    </TileHeading>
+                                    <JobSmallText>
+                                      Priority:&nbsp;{item.priority}
+                                    </JobSmallText>
+
+                                    <GridContainer
+                                      justify="flex-start"
+                                      gap="0"
+                                      columns="auto auto"
+                                    >
+                                      <LightText>Reporter:&nbsp;</LightText>
+                                      <LightText>{item.reporter}</LightText>
+                                    </GridContainer>
+                                    <HLine />
+                                    <CenterFlexContainer justify="space-between">
+                                      <Container align="flex-start">
+                                        <LightText>Assignee:&nbsp;</LightText>
+                                        <LightText>{item.assignee}</LightText>
+                                      </Container>
+
+                                      <Button
+                                        onClick={() => openModal(item._id)}
+                                      >
+                                        Update
+                                      </Button>
+                                    </CenterFlexContainer>
+                                  </KanbanCard>
+                                )}
+                              </Draggable>
+                            );
+                          })}
+                        {provided.placeholder}
+                      </KanbanColumn>
+                    </Container>
+                  );
+                }}
+              </Droppable>
+            );
+          })}
+        </DragDropContext>
+      </KanbanContainer>
+    </GridContainer>
   );
 }
 
 export default ActiveSprintScreen;
+
+function ProfileToggle({ isSelected, user, setSelectedDevList }) {
+  const [selected, setSelected] = useState(isSelected);
+
+  useEffect(() => {
+    if (selected) {
+      setSelectedDevList((curSelectedDevs) => [
+        ...curSelectedDevs,
+        user.fullName,
+      ]);
+    } else {
+      setSelectedDevList((curSelectedDevs) =>
+        curSelectedDevs.filter((name) => name !== user.fullName)
+      );
+    }
+  }, [selected]);
+  return (
+    <ProfileAvatar onClick={() => setSelected(!selected)} isSelected={selected}>
+      {user.fullName.substr(0, 1)} {user.fullName.split(" ")[1]?.substr(0, 1)}
+    </ProfileAvatar>
+  );
+}

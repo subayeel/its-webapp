@@ -6,12 +6,13 @@ export const MenuBar = styled(GridContainer)`
   box-sizing: border-box;
   padding: 1rem 0;
   border-right: 2px solid #ddd;
-  height: calc(100vh - 60px);
+  height: calc(100vh - 65px);
   align-items: flex-start;
 `;
 
 export const KanbanContainer = styled.div`
   display: flex;
+
   width: 100%;
   overflow: auto;
   white-space: nowrap;
@@ -26,7 +27,7 @@ export const KanbanContainer = styled.div`
 
 export const KanbanColumn = styled(Container)`
   min-width: 300px;
-  height: 500px;
+  height: 450px;
   justify-content: flex-start;
   align-items: flex-start;
   overflow: auto;
@@ -106,7 +107,6 @@ export const SkillTile = styled(CenterFlexContainer)`
 `;
 
 export const TableContainer = styled.div`
- 
   max-height: 400px;
   & > table {
     width: 100%;
@@ -116,7 +116,7 @@ export const TableContainer = styled.div`
     border-radius: 4px;
     font-size: 12pt;
     border-collapse: collapse;
-    
+
     & > tr {
       padding: 8px 4px;
       & > td,
@@ -135,9 +135,31 @@ export const TableContainer = styled.div`
 `;
 
 export const DeleteIcon = styled(Delete)`
-color: #880808;
-&:hover{
-  cursor: pointer;
-  color: #EE4B2B;
-}
-`
+  color: #880808;
+  &:hover {
+    cursor: pointer;
+    color: #ee4b2b;
+  }
+`;
+
+export const ProfileAvatar = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 3rem;
+  width: 3rem;
+  background-color: #f2b989;
+  color: white;
+  text-transform: uppercase;
+  font-weight: 500;
+  border-radius: 50%;
+  box-shadow: -7px 0px 10px 0px rgba(0,0,0,0.1);
+  border: ${(props) => (props.isSelected ? "3px solid #6B7EBF" : "none")};
+  transition: all 0.2s ease-in-out;
+
+  &:hover {
+    /* background-color: #f2b989CC; */
+    cursor: pointer;
+    transform: translateY(10px);
+  }
+`;

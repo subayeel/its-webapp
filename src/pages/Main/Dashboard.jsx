@@ -35,6 +35,9 @@ import { useGetSingleProjectQuery } from "../../api/endpoints/projectEndpoint";
 
 import { useSelector, useDispatch } from "react-redux";
 import { setProjectData } from "../../reduxSlices/projectsSlice";
+import RoadMapDashboard from "./Roadmap/RoadMapDashboard";
+import BacklogDashboard from "./Backlog/BacklogDashboard";
+import Epic from "./Epic/Epic";
 
 function Dashboard() {
   const { id } = useParams();
@@ -55,6 +58,14 @@ function Dashboard() {
   function renderBody() {
     if (activeTab === "sprint") {
       return <ActiveSprintScreen></ActiveSprintScreen>;
+    } else if (activeTab === "roadmap") {
+      return <RoadMapDashboard></RoadMapDashboard>;
+    } else if (activeTab === "backlog") {
+      return <BacklogDashboard />;
+    } else if (activeTab === "reports") {
+      return <BacklogDashboard />;
+    } else if (activeTab === "epic") {
+      return <Epic />;
     }
   }
 
@@ -73,10 +84,7 @@ function Dashboard() {
   const data = useSelector((state) => state.project);
 
   return (
-    <GridContainer
-      style={{ height: "calc(100vh - 65px)", background: "#fff" }}
-      columns="250px 1fr"
-    >
+    <GridContainer style={{ background: "#fff" }} columns="250px 1fr">
       <MenuBar place="flex-start">
         <BackNavigator
           columns="auto auto"
@@ -113,30 +121,49 @@ function Dashboard() {
             <ListItemIcon>
               <DashboardRounded />
             </ListItemIcon>
-            <ListItemText primary="ABC Board" />
+            <ListItemText
+              primary={`${singleProject?.title} Board`}
+              onClick={() => setOpen(!open)}
+            />
             {open ? <ExpandLess /> : <ExpandMore />}
           </ListItemButton>
           <Collapse in={open} timeout="auto" unmountOnExit>
             <List component="div" disablePadding>
-              <ListItemButton sx={{ pl: 4 }}>
+              <ListItemButton
+                onClick={() => setActiveTab("roadmap")}
+                selected={activeTab === "roadmap"}
+                sx={{ pl: 4 }}
+              >
                 <ListItemIcon>
                   <ForkRight />
                 </ListItemIcon>
                 <ListItemText primary="Roadmap" />
               </ListItemButton>
-              <ListItemButton sx={{ pl: 4 }}>
+              <ListItemButton
+                onClick={() => setActiveTab("backlog")}
+                selected={activeTab === "backlog"}
+                sx={{ pl: 4 }}
+              >
                 <ListItemIcon>
                   <LowPriority />
                 </ListItemIcon>
                 <ListItemText primary="Backlog" />
               </ListItemButton>
-              <ListItemButton sx={{ pl: 4 }}>
+              <ListItemButton
+                sx={{ pl: 4 }}
+                onClick={() => setActiveTab("sprint")}
+                selected={activeTab === "sprint"}
+              >
                 <ListItemIcon>
                   <TableChart />
                 </ListItemIcon>
                 <ListItemText primary="Active Sprint" />
               </ListItemButton>
-              <ListItemButton sx={{ pl: 4 }}>
+              <ListItemButton
+                sx={{ pl: 4 }}
+                onClick={() => setActiveTab("reports")}
+                selected={activeTab === "reports"}
+              >
                 <ListItemIcon>
                   <DocumentScanner />
                 </ListItemIcon>
@@ -144,8 +171,18 @@ function Dashboard() {
               </ListItemButton>
             </List>
           </Collapse>
+          <ListItemButton
+            onClick={() => setActiveTab("epic")}
+            selected={activeTab === "epic"}
+          >
+            <ListItemIcon>
+              <ForkRight />
+            </ListItemIcon>
+            <ListItemText primary="Epics" />
+          </ListItemButton>
         </List>
       </MenuBar>
+
       {renderBody()}
     </GridContainer>
   );

@@ -111,10 +111,10 @@ function Login() {
         {error && <ErrorContainer>{error}</ErrorContainer>}
         <LinkText to="/register">Not Registered?</LinkText>
 
-        {/* <FormControlLabel
+        <FormControlLabel
           control={<Checkbox value={persist} onChange={togglePersist} />}
           label="Remember Me"
-        /> */}
+        />
 
         <Button type="submit" onClick={handleSubmit} variant="contained">
           Login
